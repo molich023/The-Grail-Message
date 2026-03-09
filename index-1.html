@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>In the Light of Truth – The Grail Message | Abd-ru-shin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8CC7A;
+      --gold-dark: #8B6914;
+      --deep: #0A0A0F;
+      --dark: #0F0F1A;
+      --panel: #13131F;
+      --card: #1A1A2E;
+      --text: #E8E0CC;
+      --muted: #9A9080;
+      --white: #F5F0E8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--text);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── STARFIELD ── */
+    #stars {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse at 20% 50%, #0d0d2b 0%, #050508 100%);
+    }
+    #stars::before, #stars::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,200,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 40%, rgba(255,255,200,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 10%, rgba(255,255,200,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 30%, rgba(255,255,200,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 70%, rgba(255,255,200,0.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 60%, rgba(201,168,76,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 20%, rgba(255,255,200,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 80%, rgba(255,255,200,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 60% 85%, rgba(201,168,76,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 90%, rgba(255,255,200,0.5) 0%, transparent 100%);
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+      padding: 0 2rem;
+    }
+    .nav-inner {
+      max-width: 1300px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px;
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a {
+      color: var(--text); text-decoration: none;
+      font-family: 'Cinzel', serif; font-size: 0.78rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--deep) !important;
+      padding: 0.5rem 1.4rem;
+      border-radius: 2px;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--deep) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--gold); display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 2rem 80px;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-ornament {
+      font-size: 2rem; color: var(--gold); opacity: 0.6;
+      margin-bottom: 1.5rem;
+      animation: fadeDown 1s ease both;
+    }
+    .hero-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      animation: fadeDown 1s ease 0.2s both;
+    }
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-weight: 700; line-height: 1.2;
+      background: linear-gradient(180deg, var(--white) 0%, var(--gold-light) 60%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: fadeDown 1s ease 0.3s both;
+    }
+    .hero-title-sub {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      color: var(--gold-light);
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+      animation: fadeDown 1s ease 0.4s both;
+    }
+    .hero-divider {
+      width: 120px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 2rem;
+      animation: fadeDown 1s ease 0.5s both;
+    }
+    .hero-quote {
+      font-style: italic; font-size: 1.1rem;
+      color: var(--muted); max-width: 680px;
+      margin: 0 auto 3rem;
+      animation: fadeDown 1s ease 0.6s both;
+    }
+    .hero-quote span { color: var(--gold-light); }
+    .hero-buttons {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeDown 1s ease 0.7s both;
+    }
+    .btn {
+      display: inline-block; text-decoration: none;
+      font-family: 'Cinzel', serif; font-size: 0.82rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.9rem 2.2rem; border-radius: 2px;
+      transition: all 0.3s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--deep); font-weight: 700;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+    .btn-outline:hover { background: rgba(201,168,76,0.1); transform: translateY(-2px); }
+    .scroll-indicator {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-indicator span {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.2em; color: var(--muted);
+    }
+    .scroll-arrow { width: 20px; height: 20px; border-right: 1px solid var(--gold); border-bottom: 1px solid var(--gold); transform: rotate(45deg); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+    .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem; }
+    .section-label {
+      font-family: 'Cinzel', serif; font-size: 0.72rem;
+      letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1rem; display: block;
+    }
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      color: var(--white); margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    .ornament-line {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 3rem;
+    }
+    .ornament-line::before, .ornament-line::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dark));
+    }
+    .ornament-line::after { background: linear-gradient(90deg, var(--gold-dark), transparent); }
+    .ornament-line span { color: var(--gold); font-size: 1.2rem; }
+
+    /* ── ABOUT ABD-RU-SHIN ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .author-portrait {
+      position: relative;
+    }
+    .portrait-frame {
+      width: 100%; padding-bottom: 130%;
+      background: linear-gradient(145deg, var(--card), var(--panel));
+      border: 1px solid rgba(201,168,76,0.3);
+      position: relative; overflow: hidden;
+    }
+    .portrait-frame::before {
+      content: '';
+      position: absolute; inset: 8px;
+      border: 1px solid rgba(201,168,76,0.15);
+    }
+    .portrait-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+    }
+    .portrait-icon { font-size: 5rem; margin-bottom: 1rem; opacity: 0.4; }
+    .portrait-caption {
+      font-family: 'Cinzel', serif; font-size: 0.75rem;
+      letter-spacing: 0.2em; color: var(--gold); opacity: 0.7;
+    }
+    .portrait-dates {
+      font-family: 'Cinzel', serif; font-size: 0.9rem;
+      color: var(--gold); margin-top: 0.5rem;
+    }
+    .corner-ornament {
+      position: absolute; width: 30px; height: 30px;
+      border-color: var(--gold); border-style: solid; opacity: 0.5;
+    }
+    .corner-ornament.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .corner-ornament.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .corner-ornament.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+    .corner-ornament.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    .about-text p { margin-bottom: 1.2rem; color: var(--text); font-size: 1.02rem; }
+    .about-text .highlight {
+      color: var(--gold-light); font-style: italic;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; padding-left: 2.5rem; margin-top: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 6px; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(180deg, var(--gold), transparent);
+    }
+    .timeline-item { position: relative; margin-bottom: 2rem; }
+    .timeline-dot {
+      position: absolute; left: -2.15rem; top: 0.4rem;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(201,168,76,0.5);
+    }
+    .timeline-year {
+      font-family: 'Cinzel', serif; font-size: 0.8rem;
+      color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.3rem;
+    }
+    .timeline-text { font-size: 0.95rem; color: var(--muted); }
+
+    /* ── THE BOOKS ── */
+    .books-section { background: var(--panel); }
+    .books-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .book-card {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 0; overflow: hidden;
+      transition: all 0.4s;
+      cursor: pointer;
+      text-decoration: none;
+      display: block; color: inherit;
+    }
+    .book-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(201,168,76,0.1);
+    }
+    .book-cover {
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .book-cover-1 { background: linear-gradient(145deg, #1a1025, #2d1b4e); }
+    .book-cover-2 { background: linear-gradient(145deg, #0d1f1a, #1a3d2e); }
+    .book-cover-3 { background: linear-gradient(145deg, #1f1508, #3d2a10); }
+    .book-cover-4 { background: linear-gradient(145deg, #0d1a2e, #1a2d4a); }
+    .book-cover-5 { background: linear-gradient(145deg, #1a0d1a, #3a1a3a); }
+    .book-cover-6 { background: linear-gradient(145deg, #1a1505, #3d3010); }
+    .book-cover-7 { background: linear-gradient(145deg, #0d1a1a, #1a3535); }
+    .book-cover-8 { background: linear-gradient(145deg, #1a0d10, #3d1520); }
+    .book-cover-9 { background: linear-gradient(145deg, #0f0f28, #1e1e4a); }
+    .book-cover-10 { background: linear-gradient(145deg, #1a1210, #3d2820); }
+
+    /* ── IMAGE PLACEHOLDER READY STATE ── */
+    .book-img-slot {
+      width: 100%; height: 200px; object-fit: cover;
+      display: block;
+    }
+    .book-img-slot.pending {
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.12em; color: rgba(201,168,76,0.4);
+      text-transform: uppercase;
+    }
+    .img-pending-icon { font-size: 1.6rem; opacity: 0.35; }
+    .book-cover-icon { font-size: 3.5rem; opacity: 0.5; }
+    .book-cover-title {
+      position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
+      font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 700;
+      color: var(--gold-light); letter-spacing: 0.05em;
+      text-align: center;
+    }
+    .book-cover-ornament {
+      position: absolute; top: 0.7rem; left: 50%; transform: translateX(-50%);
+      font-size: 1rem; color: var(--gold); opacity: 0.4;
+    }
+    .book-body { padding: 1.5rem; }
+    .book-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.8rem;
+    }
+    .book-tag {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); background: rgba(201,168,76,0.1);
+      padding: 0.2rem 0.6rem; border-radius: 2px;
+    }
+    .book-year { font-size: 0.8rem; color: var(--muted); }
+    .book-title {
+      font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.8rem; line-height: 1.4;
+    }
+    .book-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .book-price {
+      margin-top: 1rem; padding-top: 1rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .price-tag { font-family: 'Cinzel', serif; color: var(--gold); font-weight: 700; font-size: 1rem; }
+    .add-cart-btn {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--deep); border: none; cursor: pointer;
+      font-family: 'Cinzel', serif; font-size: 0.7rem;
+      letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
+      padding: 0.5rem 1.1rem; border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .add-cart-btn:hover { opacity: 0.85; transform: scale(1.03); }
+
+    /* ── TEACHINGS ── */
+    .teachings-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+    .teaching-card {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.1);
+      padding: 2rem 1.5rem;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .teaching-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .teaching-card:hover { border-color: rgba(201,168,76,0.3); }
+    .teaching-card:hover::before { opacity: 1; }
+    .teaching-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .teaching-title {
+      font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+      color: var(--gold-light); margin-bottom: 0.8rem;
+    }
+    .teaching-text { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── AUDIO ── */
+    .audio-section { background: var(--panel); }
+    .audio-hero {
+      text-align: center; max-width: 700px; margin: 0 auto 4rem;
+    }
+    .audio-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .audio-card {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .audio-header { display: flex; align-items: center; gap: 1rem; }
+    .audio-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold);
+      flex-shrink: 0;
+    }
+    .audio-info h4 {
+      font-family: 'Cinzel', serif; font-size: 0.9rem;
+      color: var(--white); margin-bottom: 0.2rem;
+    }
+    .audio-info span { font-size: 0.8rem; color: var(--muted); }
+    .audio-player-mock {
+      background: rgba(201,168,76,0.05);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 2px; padding: 0.8rem 1rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .play-btn {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform 0.2s;
+    }
+    .play-btn:hover { transform: scale(1.1); }
+    .play-btn::after {
+      content: ''; border-left: 10px solid var(--deep);
+      border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+      margin-left: 3px;
+    }
+    .progress-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+    .progress-fill { height: 100%; width: 0%; background: var(--gold); border-radius: 3px; }
+    .audio-duration { font-size: 0.75rem; color: var(--muted); }
+    .audio-footer {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .audio-price { font-family: 'Cinzel', serif; color: var(--gold); font-size: 0.9rem; }
+    .download-btn {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: transparent; border: 1px solid var(--gold);
+      color: var(--gold); padding: 0.4rem 0.9rem;
+      cursor: pointer; transition: all 0.3s; border-radius: 2px;
+    }
+    .download-btn:hover { background: rgba(201,168,76,0.1); }
+
+    /* ── FREE DOWNLOAD / SIGNUP ── */
+    .signup-section {
+      background: linear-gradient(135deg, #0d0d20 0%, #1a1025 50%, #0d1a10 100%);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .signup-inner {
+      max-width: 700px; margin: 0 auto; text-align: center; padding: 5rem 2rem;
+    }
+    .signup-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+    .signup-form { margin-top: 2.5rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; text-align: left; }
+    .form-group label {
+      font-family: 'Cinzel', serif; font-size: 0.7rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);
+    }
+    .form-group input, .form-group select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: var(--text); padding: 0.75rem 1rem;
+      font-family: 'EB Garamond', serif; font-size: 1rem;
+      border-radius: 2px; outline: none; transition: border-color 0.3s;
+      appearance: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+    .form-full { grid-column: 1 / -1; }
+    .form-submit-wrap { margin-top: 1.5rem; }
+    .privacy-note {
+      font-size: 0.8rem; color: var(--muted); margin-top: 1rem;
+    }
+    .privacy-note a { color: var(--gold); }
+
+    /* ── CART SECTION ── */
+    .cart-section-wrapper { background: var(--panel); }
+    .cart-notice {
+      background: rgba(201,168,76,0.07);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px; padding: 1rem 1.5rem;
+      margin-bottom: 2rem; font-size: 0.9rem; color: var(--muted);
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .cart-notice span { color: var(--gold); font-size: 1.2rem; }
+    .cart-table-wrap { overflow-x: auto; }
+    .cart-table { width: 100%; border-collapse: collapse; }
+    .cart-table th {
+      font-family: 'Cinzel', serif; font-size: 0.72rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+      padding: 1rem; text-align: left;
+    }
+    .cart-table td {
+      padding: 1.2rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.95rem; color: var(--text);
+    }
+    .cart-table tr:hover td { background: rgba(201,168,76,0.03); }
+    .cart-book-title {
+      font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--white);
+      display: block; margin-bottom: 0.2rem;
+    }
+    .cart-book-sub { font-size: 0.8rem; color: var(--muted); }
+    .qty-control {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .qty-btn {
+      width: 28px; height: 28px; border: 1px solid rgba(201,168,76,0.3);
+      background: transparent; color: var(--gold); cursor: pointer;
+      border-radius: 2px; font-size: 1rem; transition: all 0.2s;
+    }
+    .qty-btn:hover { background: rgba(201,168,76,0.1); }
+    .qty-num { font-family: 'Cinzel', serif; min-width: 24px; text-align: center; color: var(--text); }
+    .cart-total-row { background: rgba(201,168,76,0.05) !important; }
+    .cart-total-row td { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold) !important; font-size: 1rem; }
+    .payment-methods {
+      display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem;
+      padding-top: 2rem; border-top: 1px solid rgba(201,168,76,0.1);
+    }
+    .payment-card {
+      background: var(--card); border: 1px solid rgba(201,168,76,0.15);
+      padding: 1rem 1.5rem; flex: 1; min-width: 200px;
+      display: flex; align-items: center; gap: 1rem;
+      cursor: pointer; transition: all 0.3s; border-radius: 2px;
+    }
+    .payment-card:hover { border-color: var(--gold); }
+    .payment-card.active { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+    .payment-icon { font-size: 2rem; }
+    .payment-name {
+      font-family: 'Cinzel', serif; font-size: 0.85rem;
+      color: var(--white); display: block; margin-bottom: 0.2rem;
+    }
+    .payment-desc { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── QUOTE BANNER ── */
+    .quote-banner {
+      background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      text-align: center; padding: 5rem 2rem;
+    }
+    .quote-banner blockquote {
+      max-width: 900px; margin: 0 auto;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-style: italic; line-height: 1.8;
+      color: var(--text);
+    }
+    .quote-banner blockquote em { color: var(--gold-light); }
+    .quote-banner cite {
+      display: block; margin-top: 1.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.8rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand h3 {
+      font-family: 'Cinzel Decorative', serif; font-size: 1rem;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .footer-brand p { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+    .footer-col h4 {
+      font-family: 'Cinzel', serif; font-size: 0.75rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.7rem; }
+    .footer-col ul a {
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .footer-col ul a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { font-size: 0.8rem; color: var(--muted); }
+    .footer-bottom .brand { color: var(--gold); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.3);
+      max-width: 500px; width: 90%;
+      padding: 3rem 2rem;
+      position: relative; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.5rem; cursor: pointer;
+    }
+    .modal-close:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── CART BADGE ── */
+    .cart-btn {
+      position: relative; display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.78rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: transparent; border: 1px solid rgba(201,168,76,0.4);
+      color: var(--text); padding: 0.4rem 1rem;
+      cursor: pointer; transition: all 0.3s; border-radius: 2px;
+      text-decoration: none;
+    }
+    .cart-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .cart-badge {
+      background: var(--gold); color: var(--deep); font-size: 0.6rem;
+      font-weight: 700; width: 16px; height: 16px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .books-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">✦ The Grail Message</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#books">Books</a></li>
+      <li><a href="#teachings">Teachings</a></li>
+      <li><a href="#audio">Audio</a></li>
+      <li><a href="#free-download">Free Book</a></li>
+      <li><a href="#cart">Shop</a></li>
+      <a href="#cart" class="cart-btn">🛒 Cart <span class="cart-badge" id="cartBadge">0</span></a>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-ornament">✦ ✧ ✦</div>
+  <p class="hero-subtitle">The Eternal Word for the Earnest Seeker</p>
+  <h1 class="hero-title">In the Light of Truth</h1>
+  <p class="hero-title-sub">The Grail Message</p>
+  <div class="hero-divider"></div>
+  <p class="hero-quote">
+    <span>"The Message will strike only those who still carry within them</span>
+    a spark of truth and the yearning to be true human beings."
+  </p>
+  <div class="hero-buttons">
+    <a href="#books" class="btn btn-primary">Explore the Books</a>
+    <a href="#free-download" class="btn btn-outline">Download Free Sample</a>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-arrow"></div>
+    <span>Scroll to discover</span>
+  </div>
+</section>
+
+<!-- ABOUT ABD-RU-SHIN -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="author-portrait">
+        <div class="portrait-frame">
+          <div class="corner-ornament tl"></div>
+          <div class="corner-ornament tr"></div>
+          <div class="corner-ornament bl"></div>
+          <div class="corner-ornament br"></div>
+          <div class="portrait-placeholder">
+            <div class="portrait-icon">⚜</div>
+            <p class="portrait-caption">Oskar Ernst Bernhardt</p>
+            <p class="portrait-caption">Known as</p>
+            <p class="portrait-dates">Abd-ru-shin</p>
+            <p class="portrait-dates" style="font-size:0.8rem; color: var(--muted); margin-top:0.5rem">1875 – 1941</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <span class="section-label">The Author</span>
+        <h2 class="section-title">Abd-ru-shin — Servant of the Light</h2>
+        <div class="ornament-line"><span>✦</span></div>
+        <p>
+          <span class="highlight">Oskar Ernst Bernhardt</span>, who wrote under the spiritual name Abd-ru-shin — meaning "Servant of the Light" — was born on April 18, 1875, in Bischofswerda, a small Saxon town near Dresden, Germany. He grew up in a happy household, received a commercial education, and later became a successful merchant and author.
+        </p>
+        <p>
+          From 1907 onward, he devoted himself entirely to writing, producing travelogues, novels, and plays — several of which were performed in Leipzig. When World War I broke out, he was living in London, and was interned by the British Government on the Isle of Man as a German national from 1914 to 1919.
+        </p>
+        <p>
+          It was during this period of forced isolation that his deep spiritual insights began to crystallize. Returning to Germany in 1919, he began writing and delivering lectures that would become <span class="highlight">The Grail Message</span>, first published in 1926. In 1928, he settled on Vomperberg in the Tyrol, Austria, where a community of readers gathered around him.
+        </p>
+        <p>
+          In 1938, when the Nazis seized Austria, Abd-ru-shin was arrested, his work was banned, and his property confiscated. Kept under Gestapo surveillance, he continued revising his final edition in exile. He passed on December 6, 1941, at the age of 66 — yet his Word endures.
+        </p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1875</p>
+            <p class="timeline-text">Born in Bischofswerda, Saxony, Germany</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1907</p>
+            <p class="timeline-text">Leaves commerce; becomes a full-time writer</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1914–1919</p>
+            <p class="timeline-text">Interned on the Isle of Man; spiritual insights emerge</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1923</p>
+            <p class="timeline-text">Begins writing and publishing the Grail Papers (Gralsblätter)</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1926</p>
+            <p class="timeline-text">First edition of The Grail Message published</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1931</p>
+            <p class="timeline-text">Expanded edition of 168 lectures published</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <p class="timeline-year">1938–1941</p>
+            <p class="timeline-text">Arrested by Nazis; dies in Kipsdorf, Germany, Dec 6</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE BANNER -->
+<div class="quote-banner">
+  <blockquote>
+    "I do not hand over the Message so that you can deal with It as you see fit —
+    <em>I COMMAND that It must remain immutable in all that It contains.</em>
+    It is the Holy Word of God, which man may not touch."
+    <cite>— Abd-ru-shin</cite>
+  </blockquote>
+</div>
+
+<!-- BOOKS FOR SALE -->
+<section id="books">
+  <div class="section-inner">
+    <span class="section-label">The Works</span>
+    <h2 class="section-title">Books by Abd-ru-shin</h2>
+    <div class="ornament-line"><span>✦</span></div>
+
+    <div class="books-grid">
+
+      <!-- Book 1 -->
+      <div class="book-card" onclick="addToCart('In the Light of Truth – Vol. I', 2500)">
+        <div class="book-cover book-cover-1">
+          <span class="book-cover-ornament">⚜</span>
+          <div class="book-cover-icon">📖</div>
+          <p class="book-cover-title">In the Light of Truth — Volume I</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Core Work</span>
+            <span class="book-year">1926 / Final Ed. 1937</span>
+          </div>
+          <h3 class="book-title">In the Light of Truth – The Grail Message, Vol. I</h3>
+          <p class="book-desc">The foundational volume. Addresses the origin of the human spirit, the Laws of Creation, the nature of God, and man's journey through existence. Covers God, Creation, free will, karma, and the path of ascent. With over one million copies printed worldwide.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 2,500</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 2 -->
+      <div class="book-card" onclick="addToCart('In the Light of Truth – Vol. II', 2500)">
+        <div class="book-cover book-cover-2">
+          <span class="book-cover-ornament">✦</span>
+          <div class="book-cover-icon">📖</div>
+          <p class="book-cover-title">In the Light of Truth — Volume II</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Core Work</span>
+            <span class="book-year">1931 Edition</span>
+          </div>
+          <h3 class="book-title">In the Light of Truth – The Grail Message, Vol. II</h3>
+          <p class="book-desc">Deepens understanding of the ethereal world, nature beings, the beyond, and what truly awaits the human soul after physical death. Provides profound insights into the working of the Laws in Creation — immutable and just.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 2,500</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 3 -->
+      <div class="book-card" onclick="addToCart('In the Light of Truth – Vol. III', 2500)">
+        <div class="book-cover book-cover-3">
+          <span class="book-cover-ornament">⚜</span>
+          <div class="book-cover-icon">📖</div>
+          <p class="book-cover-title">In the Light of Truth — Volume III</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Core Work</span>
+            <span class="book-year">Final Edition</span>
+          </div>
+          <h3 class="book-title">In the Light of Truth – The Grail Message, Vol. III</h3>
+          <p class="book-desc">The concluding volume covering humanity's responsibilities toward Creation, the relationship between the sexes, the significance of the Holy Grail, and the cosmic turning point. Completes the full picture of Creation in 168 essays.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 2,500</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 4 -->
+      <div class="book-card" onclick="addToCart('In the Light of Truth – 3-Volume Boxed Set', 6500)">
+        <div class="book-cover book-cover-4">
+          <span class="book-cover-ornament">✦</span>
+          <div class="book-cover-icon">📚</div>
+          <p class="book-cover-title">3-Volume Boxed Set — Complete Edition</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Best Value</span>
+            <span class="book-year">Complete Set</span>
+          </div>
+          <h3 class="book-title">The Grail Message – Complete 3-Volume Boxed Set</h3>
+          <p class="book-desc">The complete, authorised final edition of the Grail Message in a beautiful three-volume boxed set. All 168 lectures. The definitive collection for every sincere seeker. Save KSH 1,000 compared to buying volumes separately.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 6,500</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 5 -->
+      <div class="book-card" onclick="addToCart('Resonances to the Grail Message – Vol. I', 2200)">
+        <div class="book-cover book-cover-5">
+          <span class="book-cover-ornament">⚜</span>
+          <div class="book-cover-icon">📘</div>
+          <p class="book-cover-title">Resonances to the Grail Message — Vol. I</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Extension</span>
+            <span class="book-year">Published 1934</span>
+          </div>
+          <h3 class="book-title">Resonances to the Grail Message, Vol. I</h3>
+          <p class="book-desc">The extension of the Grail Message. These lectures deepen and expand on the core themes — resurrection, omnipresence, fate, and spiritual responsibility. Readers must know the Grail Message before approaching the Resonances.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 2,200</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 6 -->
+      <div class="book-card" onclick="addToCart('Resonances to the Grail Message – Vol. II', 2200)">
+        <div class="book-cover book-cover-6">
+          <span class="book-cover-ornament">✦</span>
+          <div class="book-cover-icon">📘</div>
+          <p class="book-cover-title">Resonances to the Grail Message — Vol. II</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Extension</span>
+            <span class="book-year">Posthumous</span>
+          </div>
+          <h3 class="book-title">Resonances to the Grail Message, Vol. II</h3>
+          <p class="book-desc">Prepared by the Author but unpublished during his lifetime due to adverse political conditions. Released posthumously. Contains additional lectures on spiritual awakening, the nature of darkness, and humanity's path toward the Light.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 2,200</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 7 — The Ten Commandments of God & The Lord's Prayer -->
+      <div class="book-card" onclick="addToCart('The Ten Commandments of God & The Lord\'s Prayer', 1800)">
+        <div class="book-cover book-cover-7">
+          <span class="book-cover-ornament">✦</span>
+          <div class="book-cover-icon">📜</div>
+          <p class="book-cover-title">The Ten Commandments of God & The Lord's Prayer</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Sacred Commentary</span>
+            <span class="book-year">Abd-ru-shin</span>
+          </div>
+          <h3 class="book-title">The Ten Commandments of God & The Lord's Prayer</h3>
+          <p class="book-desc">Abd-ru-shin illuminates the Ten Commandments and the Lord's Prayer not as religious formula but as living, cosmic laws and a direct conversation with the Creator. Each commandment is explained as an immutable pillar of Creation, showing how obedience to these laws uplifts the human spirit toward the Light. The Lord's Prayer is revealed word by word as a perfect spiritual petition — a bridge between the human soul and God. Essential reading for any earnest Christian seeker.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 1,800</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 8 — Prayers -->
+      <div class="book-card" onclick="addToCart('Prayers – Given to Mankind by Abd-ru-shin', 1,500)">
+        <div class="book-cover book-cover-8">
+          <span class="book-cover-ornament">⚜</span>
+          <div class="book-cover-icon">🙏</div>
+          <p class="book-cover-title">Prayers — Given to Mankind by Abd-ru-shin</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Devotional</span>
+            <span class="book-year">Abd-ru-shin</span>
+          </div>
+          <h3 class="book-title">Prayers — Given to Mankind by Abd-ru-shin</h3>
+          <p class="book-desc">A treasury of prayers composed personally by Abd-ru-shin — not drawn from tradition but given as living words of power, aligned with the Laws of Creation. These prayers are not mere recitation but genuine spiritual conversations that, when spoken with inner sincerity, set real threads of fate into motion. Covering morning, evening, gratitude, petition, and surrender, this small book is a daily companion on the spiritual path for every seeking soul.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 1,500</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 9 — Questions and Answers -->
+      <div class="book-card" onclick="addToCart('Questions and Answers', 2000)">
+        <div class="book-cover book-cover-9">
+          <span class="book-cover-ornament">✦</span>
+          <div class="book-cover-icon">❓</div>
+          <p class="book-cover-title">Questions and Answers</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Reference</span>
+            <span class="book-year">Abd-ru-shin</span>
+          </div>
+          <h3 class="book-title">Questions and Answers</h3>
+          <p class="book-desc">Compiled from questions put directly to Abd-ru-shin by earnest readers of the Grail Message, and answered by him personally. Topics span the entire breadth of Creation: reincarnation, nature beings, the relationship between man and woman, prayer, illness, fate, the role of animals in Creation, and the difference between the human spirit and the animal soul. An indispensable companion volume that clarifies many passages from the Grail Message with precision and warmth.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 2,000</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book 10 — Selected Lectures -->
+      <div class="book-card" onclick="addToCart('Selected Lectures from In the Light of Truth', 1800)">
+        <div class="book-cover book-cover-10">
+          <span class="book-cover-ornament">⚜</span>
+          <div class="book-cover-icon">📋</div>
+          <p class="book-cover-title">Selected Lectures from In the Light of Truth</p>
+        </div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">Introductory</span>
+            <span class="book-year">Abd-ru-shin</span>
+          </div>
+          <h3 class="book-title">Selected Lectures from the Work "In the Light of Truth"</h3>
+          <p class="book-desc">An ideal entry point for the new seeker. This carefully curated selection presents the most accessible and impactful lectures from the full three-volume Grail Message. Covering the origin of the human spirit, the Laws of Creation, karma, life after death, and the meaning of human existence on earth. Those touched by these selections will inevitably be drawn to study the complete work. A perfect book to give to a sincere friend or family member.</p>
+          <div class="book-price">
+            <span class="price-tag">KSH 1,800</span>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- IMAGE UPLOAD NOTICE -->
+    <div style="margin-top:2.5rem; background:rgba(201,168,76,0.05); border:1px dashed rgba(201,168,76,0.25); padding:1.5rem 2rem; border-radius:2px; display:flex; align-items:center; gap:1rem;">
+      <span style="font-size:1.5rem;">🖼️</span>
+      <p style="font-size:0.9rem; color:var(--muted); margin:0;">
+        <strong style="color:var(--gold-light); font-family:'Cinzel',serif;">Book Images Coming Soon</strong><br>
+        Official book cover images will be added once provided. Each card above is ready to display its image — simply replace the cover placeholder with the uploaded photo.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- TEACHINGS -->
+<section id="teachings">
+  <div class="section-inner">
+    <span class="section-label">Core Themes</span>
+    <h2 class="section-title">What the Grail Message Reveals</h2>
+    <div class="ornament-line"><span>✦</span></div>
+    <p style="max-width:760px; color: var(--muted); margin-bottom:2rem;">
+      Written between 1923 and 1938, the 168 essays of the Grail Message address every sphere of human existence — from the origin of the spirit to the laws governing Creation. Here are the central pillars of Abd-ru-shin's teaching:
+    </p>
+
+    <div class="teachings-grid">
+      <div class="teaching-card">
+        <div class="teaching-icon">🌌</div>
+        <h4 class="teaching-title">The Laws of Creation</h4>
+        <p class="teaching-text">Immutable, living laws woven into Creation by the Creator — including the Law of Attraction, the Law of Reciprocal Action, and the Law of Gravity. Understanding these laws is essential for navigating life consciously.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">✨</div>
+        <h4 class="teaching-title">The Human Spirit</h4>
+        <p class="teaching-text">Human beings are spiritual guests on this earth, descended from a higher spiritual realm. Life on earth is a school for the spirit's development and ascent back toward the Light of God.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">⚖️</div>
+        <h4 class="teaching-title">Divine Justice & Karma</h4>
+        <p class="teaching-text">Every thought, word, and deed carries threads of fate that return to the sender. The Grail Message explains karma not as punishment but as the perfect, loving justice of a living Creation.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">🕊️</div>
+        <h4 class="teaching-title">The Mission of Jesus</h4>
+        <p class="teaching-text">Abd-ru-shin provides a clarifying exposition of the true Mission of Jesus — not misunderstood redemption but the living example of the Love of God and the path of ascent for all human spirits.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">🌅</div>
+        <h4 class="teaching-title">Life After Death</h4>
+        <p class="teaching-text">What truly happens when the physical body dies? The Grail Message describes the ethereal world, the planes of the beyond, and the continued journey of the human spirit with striking clarity.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">⚜️</div>
+        <h4 class="teaching-title">The Holy Grail</h4>
+        <p class="teaching-text">Abd-ru-shin describes the Holy Grail not as an earthly myth but as a spiritual reality — the highest connecting point between the Creator and all of Creation, a living, luminous vessel of Divine power.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">🧠</div>
+        <h4 class="teaching-title">Intellect vs. Intuition</h4>
+        <p class="teaching-text">The Grail Message teaches that over-reliance on the intellect has choked humanity's spiritual perception. The true instrument of the spirit is intuition — the direct voice of the inner self.</p>
+      </div>
+      <div class="teaching-card">
+        <div class="teaching-icon">🌿</div>
+        <h4 class="teaching-title">Free Will & Responsibility</h4>
+        <p class="teaching-text">Every human spirit is given free will. This gift carries absolute responsibility — no one can be saved by another. Each person must strive, seek, and act according to the Laws of Creation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIO VOLUMES -->
+<section id="audio" class="audio-section">
+  <div class="section-inner">
+    <div class="audio-hero">
+      <span class="section-label">Audio Library</span>
+      <h2 class="section-title">The Grail Message in Audio</h2>
+      <div class="ornament-line"><span>✦</span></div>
+      <p style="color: var(--muted);">Listen to the original lectures of Abd-ru-shin, chapter by chapter. Download individual volumes for a fee, or pay by card for instant access. Perfect for seekers on the go.</p>
+    </div>
+
+    <div class="audio-grid">
+      <div class="audio-card">
+        <div class="audio-header">
+          <div class="audio-num">01</div>
+          <div class="audio-info">
+            <h4>What Is the Grail Message?</h4>
+            <span>Introduction · 18 min</span>
+          </div>
+        </div>
+        <div class="audio-player-mock">
+          <button class="play-btn" onclick="playAudio(this)"></button>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="audio-duration">18:42</span>
+        </div>
+        <div class="audio-footer">
+          <span class="audio-price">KSH 150</span>
+          <button class="download-btn" onclick="openSignup()">Download</button>
+        </div>
+      </div>
+
+      <div class="audio-card">
+        <div class="audio-header">
+          <div class="audio-num">02</div>
+          <div class="audio-info">
+            <h4>What Seeks Man on Earth?</h4>
+            <span>Vol. I — Chapter 1 · 22 min</span>
+          </div>
+        </div>
+        <div class="audio-player-mock">
+          <button class="play-btn" onclick="playAudio(this)"></button>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="audio-duration">22:15</span>
+        </div>
+        <div class="audio-footer">
+          <span class="audio-price">KSH 150</span>
+          <button class="download-btn" onclick="openSignup()">Download</button>
+        </div>
+      </div>
+
+      <div class="audio-card">
+        <div class="audio-header">
+          <div class="audio-num">03</div>
+          <div class="audio-info">
+            <h4>The Call for the Helper</h4>
+            <span>Vol. I — Chapter 2 · 19 min</span>
+          </div>
+        </div>
+        <div class="audio-player-mock">
+          <button class="play-btn" onclick="playAudio(this)"></button>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="audio-duration">19:08</span>
+        </div>
+        <div class="audio-footer">
+          <span class="audio-price">KSH 150</span>
+          <button class="download-btn" onclick="openSignup()">Download</button>
+        </div>
+      </div>
+
+      <div class="audio-card">
+        <div class="audio-header">
+          <div class="audio-num">04</div>
+          <div class="audio-info">
+            <h4>The Laws of Creation</h4>
+            <span>Vol. I — Chapter 5 · 31 min</span>
+          </div>
+        </div>
+        <div class="audio-player-mock">
+          <button class="play-btn" onclick="playAudio(this)"></button>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="audio-duration">31:54</span>
+        </div>
+        <div class="audio-footer">
+          <span class="audio-price">KSH 200</span>
+          <button class="download-btn" onclick="openSignup()">Download</button>
+        </div>
+      </div>
+
+      <div class="audio-card">
+        <div class="audio-header">
+          <div class="audio-num">05</div>
+          <div class="audio-info">
+            <h4>Karma — The Law of Reciprocal Action</h4>
+            <span>Vol. II — Chapter 12 · 28 min</span>
+          </div>
+        </div>
+        <div class="audio-player-mock">
+          <button class="play-btn" onclick="playAudio(this)"></button>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="audio-duration">28:33</span>
+        </div>
+        <div class="audio-footer">
+          <span class="audio-price">KSH 200</span>
+          <button class="download-btn" onclick="openSignup()">Download</button>
+        </div>
+      </div>
+
+      <div class="audio-card">
+        <div class="audio-header">
+          <div class="audio-num">06</div>
+          <div class="audio-info">
+            <h4>The Holy Grail</h4>
+            <span>Vol. III — Special Lecture · 35 min</span>
+          </div>
+        </div>
+        <div class="audio-player-mock">
+          <button class="play-btn" onclick="playAudio(this)"></button>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="audio-duration">35:20</span>
+        </div>
+        <div class="audio-footer">
+          <span class="audio-price">KSH 250</span>
+          <button class="download-btn" onclick="openSignup()">Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:3rem;">
+      <p style="color: var(--muted); margin-bottom:1.5rem; font-size:0.9rem;">All audio volumes are available for full-volume download after sign-up. Pay securely via M-Pesa or bank card.</p>
+      <a href="#free-download" class="btn btn-outline">Sign Up for Free Access</a>
+    </div>
+  </div>
+</section>
+
+<!-- FREE DOWNLOAD / SIGNUP -->
+<section id="free-download" class="signup-section">
+  <div class="signup-inner">
+    <div class="signup-icon">📥</div>
+    <span class="section-label" style="text-align:center; display:block;">Free Digital Copy</span>
+    <h2 class="section-title" style="text-align:center;">Download a Free Introduction</h2>
+    <div class="ornament-line"><span>✦</span></div>
+    <p style="color: var(--muted);">
+      Receive the opening lectures of <em>In the Light of Truth</em> as a free PDF — a gift for every earnest seeker. Complete your details below to receive instant access.
+    </p>
+
+    <div class="signup-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" id="fname" placeholder="Your first name" required>
+        </div>
+        <div class="form-group">
+          <label>Surname *</label>
+          <input type="text" id="lname" placeholder="Your surname" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+254 7XX XXX XXX">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Country *</label>
+          <select id="country">
+            <option value="">Select country...</option>
+            <option value="KE" selected>Kenya</option>
+            <option value="UG">Uganda</option>
+            <option value="TZ">Tanzania</option>
+            <option value="NG">Nigeria</option>
+            <option value="GH">Ghana</option>
+            <option value="ZA">South Africa</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>City / Town</label>
+          <input type="text" id="city" placeholder="Your city">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group form-full">
+          <label>How did you hear about the Grail Message?</label>
+          <select id="referral">
+            <option value="">Please select...</option>
+            <option>From a friend or family member</option>
+            <option>Church / religious gathering</option>
+            <option>Online search</option>
+            <option>Social media</option>
+            <option>I have read the book before</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-submit-wrap">
+        <button class="btn btn-primary" onclick="submitSignup()" style="width:100%; padding:1.1rem;">
+          Download Free Sample Now
+        </button>
+      </div>
+      <p class="privacy-note">
+        Your information is kept strictly private and will not be shared with third parties.
+        By submitting, you agree to our <a href="#">Privacy Policy</a> and may receive occasional updates from us.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CART / SHOP -->
+<section id="cart" class="cart-section-wrapper">
+  <div class="section-inner">
+    <span class="section-label">Your Selection</span>
+    <h2 class="section-title">Shopping Cart</h2>
+    <div class="ornament-line"><span>✦</span></div>
+
+    <div class="cart-notice">
+      <span>ℹ️</span>
+      All prices are in Kenya Shillings (KSH). Orders are fulfilled via courier within Kenya or internationally via registered mail.
+    </div>
+
+    <div class="cart-table-wrap">
+      <table class="cart-table" id="cartTable">
+        <thead>
+          <tr>
+            <th>Book / Item</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="cartBody">
+          <tr id="emptyRow">
+            <td colspan="5" style="text-align:center; color:var(--muted); padding:3rem;">
+              Your cart is empty. <a href="#books" style="color:var(--gold);">Browse the books</a> to begin.
+            </td>
+          </tr>
+        </tbody>
+        <tfoot id="cartFoot" style="display:none;">
+          <tr class="cart-total-row">
+            <td colspan="3">Total (KSH)</td>
+            <td id="cartTotal">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- PAYMENT METHODS -->
+    <div class="payment-methods">
+      <div class="payment-card active" onclick="selectPayment(this)">
+        <div class="payment-icon">📱</div>
+        <div>
+          <span class="payment-name">M-Pesa</span>
+          <span class="payment-desc">Lipa Na M-Pesa — Paybill or Till</span>
+        </div>
+      </div>
+      <div class="payment-card" onclick="selectPayment(this)">
+        <div class="payment-icon">💳</div>
+        <div>
+          <span class="payment-name">Visa / Mastercard</span>
+          <span class="payment-desc">Secure card payment — SSL encrypted</span>
+        </div>
+      </div>
+      <div class="payment-card" onclick="selectPayment(this)">
+        <div class="payment-icon">🏦</div>
+        <div>
+          <span class="payment-name">Bank Transfer</span>
+          <span class="payment-desc">Direct bank transfer — KSH accounts</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem; text-align:center;">
+      <button class="btn btn-primary" onclick="openCheckout()" style="min-width:280px;">
+        Proceed to Checkout
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING QUOTE -->
+<div class="quote-banner">
+  <blockquote>
+    "Every inwardly free man will always assess a matter according to what it brings,
+    not according to who brings it.
+    <em>Gold is gold, whether a prince or a beggar holds it in his hand.</em>"
+    <cite>— Abd-ru-shin, In the Light of Truth</cite>
+  </blockquote>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>✦ The Grail Message</h3>
+        <p>
+          Dedicated to making the works of Abd-ru-shin — <em>In the Light of Truth</em> — available to every earnest seeker across Africa and the world. All content presented with reverence for the immutable Word.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="#about">About Abd-ru-shin</a></li>
+          <li><a href="#books">Books</a></li>
+          <li><a href="#teachings">Core Teachings</a></li>
+          <li><a href="#audio">Audio Library</a></li>
+          <li><a href="#free-download">Free Download</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#books">Grail Message Vol. I-III</a></li>
+          <li><a href="#books">Resonances Vol. I-II</a></li>
+          <li><a href="#audio">Audio Downloads</a></li>
+          <li><a href="#cart">Your Cart</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="https://grailmessage.com" target="_blank">Official Foundation ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 <span class="brand">The Grail Message Kenya</span>. All rights reserved. Works presented with respect for the Grail Message Foundation.</p>
+      <p style="color:var(--muted); font-size:0.75rem;">Website hosted on GitHub Pages · M-Pesa & Card payments secured by SSL</p>
+    </div>
+  </div>
+</footer>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
+    <span class="section-label" style="display:block; margin-bottom:0.5rem;">Secure Checkout</span>
+    <h3 class="section-title" style="font-size:1.4rem; margin-bottom:1.5rem;">Complete Your Order</h3>
+
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Full Name</label>
+      <input type="text" placeholder="Your full name">
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Email</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Phone (for M-Pesa)</label>
+      <input type="tel" placeholder="+254 7XX XXX XXX">
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Delivery Address</label>
+      <input type="text" placeholder="Street, Town, County">
+    </div>
+    <div class="form-group" style="margin-bottom:1.5rem;">
+      <label>Payment Method</label>
+      <select>
+        <option>M-Pesa — Lipa Na M-Pesa</option>
+        <option>Visa / Mastercard</option>
+        <option>Bank Transfer</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%; padding:1rem;" onclick="confirmOrder()">
+      Confirm Order & Pay
+    </button>
+    <p style="text-align:center; margin-top:1rem; font-size:0.8rem; color:var(--muted);">
+      🔒 All transactions are SSL-encrypted and secure.
+    </p>
+  </div>
+</div>
+
+<!-- THANK YOU MODAL -->
+<div class="modal-overlay" id="thankYouModal">
+  <div class="modal-box" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('thankYouModal')">✕</button>
+    <div style="font-size:3rem; margin-bottom:1rem;">✦</div>
+    <h3 class="section-title" style="font-size:1.5rem; margin-bottom:1rem;">Order Received</h3>
+    <p style="color:var(--muted); margin-bottom:1.5rem;">
+      Thank you for your order. You will receive a confirmation email with payment instructions shortly. May the Light guide your reading.
+    </p>
+    <button class="btn btn-outline" onclick="closeModal('thankYouModal')">Continue Reading</button>
+  </div>
+</div>
+
+<!-- DOWNLOAD MODAL -->
+<div class="modal-overlay" id="downloadModal">
+  <div class="modal-box" style="text-align:center;">
+    <button class="modal-close" onclick="closeModal('downloadModal')">✕</button>
+    <div style="font-size:3rem; margin-bottom:1rem;">📥</div>
+    <h3 class="section-title" style="font-size:1.4rem; margin-bottom:1rem;">Your Free Copy is Ready</h3>
+    <p style="color:var(--muted); margin-bottom:2rem;">
+      Thank you for registering. Your introductory PDF of <em>In the Light of Truth</em> is ready. May it be the beginning of a great inner journey.
+    </p>
+    <a href="#" class="btn btn-primary" download>Download Now (PDF)</a>
+    <p style="margin-top:1.5rem; font-size:0.8rem; color:var(--muted);">
+      Check your email for a copy of the download link.
+    </p>
+  </div>
+</div>
+
+<script>
+  // ── CART SYSTEM ──
+  let cart = [];
+
+  function addToCart(title, price) {
+    const existing = cart.find(i => i.title === title);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ title, price, qty: 1 });
+    }
+    updateCartUI();
+    // Flash feedback
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Added!';
+    btn.style.background = '#2d6a2d';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+    }, 1500);
+  }
+
+  function updateCartUI() {
+    const body = document.getElementById('cartBody');
+    const foot = document.getElementById('cartFoot');
+    const badge = document.getElementById('cartBadge');
+    const emptyRow = document.getElementById('emptyRow');
+
+    // Count items
+    const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+    badge.textContent = totalQty;
+
+    if (cart.length === 0) {
+      body.innerHTML = `<tr id="emptyRow"><td colspan="5" style="text-align:center; color:var(--muted); padding:3rem;">Your cart is empty. <a href="#books" style="color:var(--gold);">Browse the books</a> to begin.</td></tr>`;
+      foot.style.display = 'none';
+      return;
+    }
+
+    foot.style.display = '';
+    let html = '';
+    let total = 0;
+
+    cart.forEach((item, idx) => {
+      const sub = item.price * item.qty;
+      total += sub;
+      html += `
+        <tr>
+          <td>
+            <span class="cart-book-title">${item.title}</span>
+            <span class="cart-book-sub">by Abd-ru-shin</span>
+          </td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${idx}, -1)">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+            </div>
+          </td>
+          <td>KSH ${item.price.toLocaleString()}</td>
+          <td>KSH ${sub.toLocaleString()}</td>
+          <td><button onclick="removeItem(${idx})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;">✕</button></td>
+        </tr>`;
+    });
+
+    body.innerHTML = html;
+    document.getElementById('cartTotal').textContent = 'KSH ' + total.toLocaleString();
+  }
+
+  function changeQty(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    updateCartUI();
+  }
+
+  function removeItem(idx) {
+    cart.splice(idx, 1);
+    updateCartUI();
+  }
+
+  // ── PAYMENT SELECTION ──
+  function selectPayment(el) {
+    document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── MODALS ──
+  function openCheckout() {
+    if (cart.length === 0) {
+      alert('Your cart is empty. Please add books first.');
+      return;
+    }
+    document.getElementById('checkoutModal').classList.add('open');
+  }
+
+  function confirmOrder() {
+    closeModal('checkoutModal');
+    cart = [];
+    updateCartUI();
+    document.getElementById('thankYouModal').classList.add('open');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  function openSignup() {
+    window.location.href = '#free-download';
+  }
+
+  function submitSignup() {
+    const fname = document.getElementById('fname').value;
+    const email = document.getElementById('email').value;
+    if (!fname || !email) {
+      alert('Please fill in your name and email to continue.');
+      return;
+    }
+    document.getElementById('downloadModal').classList.add('open');
+  }
+
+  // ── AUDIO PLAY ──
+  function playAudio(btn) {
+    const fill = btn.closest('.audio-player-mock').querySelector('.progress-fill');
+    let w = 0;
+    const interval = setInterval(() => {
+      w += 0.5;
+      fill.style.width = w + '%';
+      if (w >= 30) { clearInterval(interval); }
+    }, 100);
+  }
+
+  // ── MOBILE MENU ──
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '70px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'rgba(10,10,15,0.98)';
+    links.style.padding = '1.5rem 2rem';
+    links.style.gap = '1.2rem';
+    links.style.borderBottom = '1px solid rgba(201,168,76,0.2)';
+  }
+
+  // ── CLOSE MODALS ON OVERLAY CLICK ──
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', (e) => {
+      if (e.target === m) m.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
