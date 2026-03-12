@@ -1,0 +1,34 @@
+# ══════════════════════════════════════════════════════════
+# NETLIFY CONFIGURATION — Grail Message Kenya
+# Alexander Bernhardt Publishing Company Kenya
+# ══════════════════════════════════════════════════════════
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# ── FUNCTIONS SETTINGS ──
+[functions]
+  node_bundler = "esbuild"
+
+# ── SECURITY HEADERS ──
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co https://identity.netlify.com;"
+
+# ── REDIRECTS ──
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
