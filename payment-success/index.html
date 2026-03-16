@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Confirmation — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #1a6aad; --dark: #0d2a42; --gold: #1a5c96;
+      --muted: #3a6a90; --light: #e8f4fd;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(135deg, #87ceeb 0%, #d4eefd 100%);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'EB Garamond', serif;
+      color: var(--dark);
+    }
+    .card {
+      background: rgba(255,255,255,0.93);
+      border: 2px solid rgba(26,106,173,0.2);
+      border-radius: 12px;
+      padding: 3rem 2.5rem;
+      max-width: 520px; width: 92%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(26,106,173,0.15);
+    }
+    .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--dark); margin-bottom: .5rem;
+    }
+    .subtitle { font-size: 1rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.7; }
+    .detail-box {
+      background: var(--light);
+      border: 1px solid rgba(26,106,173,0.2);
+      border-radius: 8px; padding: 1.3rem 1.5rem;
+      margin-bottom: 1.5rem; text-align: left;
+    }
+    .detail-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: .4rem 0;
+      border-bottom: 1px solid rgba(26,106,173,0.1);
+      font-size: .92rem;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--muted); font-size: .82rem; }
+    .detail-value { font-weight: 500; color: var(--dark); }
+    .badge {
+      display: inline-block; padding: .25rem .75rem;
+      border-radius: 20px; font-size: .75rem;
+      font-family: 'Cinzel', serif; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .badge-completed { background: #d1e7dd; color: #0a3622; }
+    .badge-pending   { background: #fff3cd; color: #856404; }
+    .badge-failed    { background: #f8d7da; color: #58151c; }
+    .btn {
+      display: inline-block; padding: .85rem 2rem;
+      font-family: 'Cinzel', serif; font-size: .82rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      border-radius: 6px; cursor: pointer;
+      text-decoration: none; transition: opacity .2s;
+      border: none;
+    }
+    .btn-primary { background: var(--dark); color: #fff; margin-right: .5rem; }
+    .btn-outline {
+      background: transparent; color: var(--dark);
+      border: 1.5px solid rgba(26,106,173,0.3);
+    }
+    .btn:hover { opacity: .85; }
+    .loading { color: var(--muted); font-size: .9rem; }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid rgba(26,106,173,0.2);
+      border-top-color: var(--blue);
+      border-radius: 50%; animation: spin .8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .quote {
+      font-style: italic; font-size: .88rem;
+      color: var(--muted); margin-top: 1.5rem;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="spinner"></div>
+  <p class="loading">Confirming your payment...</p>
+</div>
+
+<script>
+  const params   = new URLSearchParams(window.location.search);
+  const orderId  = params.get('order');
+  let   attempts = 0;
+  const MAX      = 10;  // poll up to 10 times (20 seconds)
+
+  async function checkStatus() {
+    if (!orderId) { showError('No order reference found.'); return; }
+
+    try {
+      const res  = await fetch(`/api/pesapal-status?order_id=${orderId}`);
+      const data = await res.json();
+
+      if (data.status === 'completed') {
+        showSuccess(data);
+      } else if (data.status === 'failed') {
+        showFailed(data);
+      } else if (attempts < MAX) {
+        // Still pending — wait 2 seconds and try again
+        attempts++;
+        setTimeout(checkStatus, 2000);
+      } else {
+        // Timed out — show pending message
+        showPending(data);
+      }
+    } catch(err) {
+      if (attempts < MAX) {
+        attempts++;
+        setTimeout(checkStatus, 2000);
+      } else {
+        showError('Could not verify payment. Please call 0736-340024.');
+      }
+    }
+  }
+
+  function showSuccess(data) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon">✦</div>
+      <h1 class="title">Payment Confirmed!</h1>
+      <p class="subtitle">
+        Thank you for your order. Your books will be delivered shortly.<br/>
+        We will contact you to arrange delivery.
+      </p>
+      <div class="detail-box">
+        <div class="detail-row">
+          <span class="detail-label">Order Reference</span>
+          <span class="detail-value">${data.reference || orderId}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Amount Paid</span>
+          <span class="detail-value">KSH ${(data.amount_ksh||0).toLocaleString()}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Payment Method</span>
+          <span class="detail-value">${data.payment_method || 'Pesapal'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <span class="badge badge-completed">Paid</span>
+        </div>
+      </div>
+      <a href="/" class="btn btn-primary">Back to Bookstore</a>
+      <p class="quote">
+        "In the beginning was the Word, and the Word was with God."<br/>
+        <em>— John 1:1</em>
+      </p>
+    `;
+  }
+
+  function showPending(data) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon">⏳</div>
+      <h1 class="title">Payment Processing</h1>
+      <p class="subtitle">
+        Your payment is being verified by Pesapal.<br/>
+        We will send you a confirmation once it is complete.
+      </p>
+      <div class="detail-box">
+        <div class="detail-row">
+          <span class="detail-label">Order Reference</span>
+          <span class="detail-value">${orderId}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <span class="badge badge-pending">Pending</span>
+        </div>
+      </div>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;">
+        If your payment was deducted and this page still shows pending,
+        please call us on <strong>0736-340024</strong> with your order reference.
+      </p>
+      <a href="/" class="btn btn-primary">Back to Bookstore</a>
+      <button class="btn btn-outline" onclick="location.reload()">Check Again</button>
+    `;
+  }
+
+  function showFailed(data) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon">❌</div>
+      <h1 class="title">Payment Not Completed</h1>
+      <p class="subtitle">
+        Your payment was not successful. No money has been deducted.<br/>
+        Please try again or use a different payment method.
+      </p>
+      <div class="detail-box">
+        <div class="detail-row">
+          <span class="detail-label">Order Reference</span>
+          <span class="detail-value">${orderId}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <span class="badge badge-failed">Failed</span>
+        </div>
+      </div>
+      <a href="/" class="btn btn-primary">Try Again</a>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:1.2rem;">
+        Need help? Call 0736-340024
+      </p>
+    `;
+  }
+
+  function showError(msg) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon">⚠️</div>
+      <h1 class="title">Something Went Wrong</h1>
+      <p class="subtitle">${msg}</p>
+      <a href="/" class="btn btn-primary">Back to Bookstore</a>
+    `;
+  }
+
+  // Start checking
+  checkStatus();
+</script>
+</body>
+</html>
