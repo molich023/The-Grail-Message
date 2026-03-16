@@ -1,0 +1,213 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --blue: #1a6aad; --dark: #0d2a42; --muted: #3a6a90;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #87ceeb 0%, #d4eefd 100%);
+      display: flex; align-items: center;
+      justify-content: center;
+      font-family: 'EB Garamond', serif;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.95);
+      border: 2px solid rgba(26,106,173,0.2);
+      border-radius: 14px; max-width: 520px;
+      width: 100%; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(26,106,173,0.15);
+      text-align: center;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #0d2a42, #1a6aad);
+      padding: 40px 30px;
+    }
+    .symbol { font-size: 3rem; color: #fff; margin-bottom: 10px; }
+    .card-title {
+      font-family: 'Cinzel', serif; font-size: 1.1rem;
+      color: #fff; letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .card-body { padding: 40px 30px; }
+    .welcome-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem; color: var(--dark);
+      margin-bottom: 15px;
+    }
+    .welcome-msg {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.9; margin-bottom: 25px;
+    }
+    .feature {
+      background: #e8f4fd;
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      padding: 12px 18px;
+      margin: 10px 0;
+      text-align: left;
+      font-size: .92rem; color: var(--dark);
+    }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--dark), var(--blue));
+      color: #fff; text-decoration: none;
+      padding: 13px 38px; border-radius: 6px;
+      font-family: 'Cinzel', serif;
+      font-size: .82rem; letter-spacing: .12em;
+      margin-top: 25px; cursor: pointer;
+      border: none; transition: opacity .3s;
+    }
+    .btn:hover { opacity: .88; }
+    .quote {
+      font-style: italic; font-size: .88rem;
+      color: var(--muted); padding: 20px 25px;
+      background: #e8f4fd;
+      border-top: 1px solid rgba(26,106,173,0.1);
+    }
+    .footer {
+      background: #f5f9fd; padding: 15px 20px;
+      font-size: .75rem; color: var(--muted);
+      border-top: 1px solid rgba(26,106,173,0.08);
+    }
+
+    /* Loading state */
+    .loading {
+      padding: 40px;
+      color: var(--muted); font-size: .9rem;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid rgba(26,106,173,0.2);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 15px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="card-header">
+    <div class="symbol">✦</div>
+    <p class="card-title">Grail Message Kenya</p>
+  </div>
+
+  <!-- Loading state -->
+  <div class="card-body" id="loadingState">
+    <div class="loading">
+      <div class="spinner"></div>
+      Verifying your account...
+    </div>
+  </div>
+
+  <!-- Welcome state (shown after verification) -->
+  <div class="card-body" id="welcomeState" style="display:none;">
+    <p class="welcome-name" id="welcomeName">
+      Welcome! 🙏
+    </p>
+    <p class="welcome-msg">
+      Your email has been verified and your account
+      is now active. Welcome to Grail Message Kenya —
+      your home for the works of Abd-ru-shin in
+      East Africa.
+    </p>
+
+    <div class="feature">
+      📚 &nbsp;Browse our full catalogue of Grail Message books
+    </div>
+    <div class="feature">
+      🎧 &nbsp;Access audio chapters of In the Light of Truth
+    </div>
+    <div class="feature">
+      📄 &nbsp;Download free introductory materials
+    </div>
+    <div class="feature">
+      📦 &nbsp;Order books delivered across East Africa
+    </div>
+
+    <button class="btn" onclick="goToSite()">
+      ✦ Enter the Bookstore
+    </button>
+  </div>
+
+  <!-- Already verified state -->
+  <div class="card-body" id="alreadyState" style="display:none;">
+    <p class="welcome-name">Welcome Back! ✦</p>
+    <p class="welcome-msg">
+      Your account is active. Click below to
+      continue to the Grail Message Kenya bookstore.
+    </p>
+    <button class="btn" onclick="goToSite()">
+      ✦ Enter the Bookstore
+    </button>
+  </div>
+
+  <div class="quote">
+    "In the beginning was the Word,
+    and the Word was with God."<br/>
+    <em>— John 1:1</em>
+  </div>
+
+  <div class="footer">
+    Alexander Bernhardt Publishing Company Kenya &nbsp;|&nbsp;
+    P.O. Box 237-00208, Ngong Hills, Kenya &nbsp;|&nbsp;
+    +254 736 340 024
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL  = 'https://ecxdrwomkxcuxlhqdtum.supabase.co';
+  const SUPABASE_ANON = 'YOUR_ANON_KEY_HERE';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  function goToSite() {
+    window.location.href = '/';
+  }
+
+  async function init() {
+    // Check session
+    const { data: { session } } = await sb.auth.getSession();
+
+    document.getElementById('loadingState').style.display = 'none';
+
+    if (session) {
+      const user      = session.user;
+      const firstName = user.user_metadata?.first_name || '';
+      const name      = firstName
+        ? `Welcome, ${firstName}! 🙏`
+        : 'Welcome! 🙏';
+
+      document.getElementById('welcomeName').textContent = name;
+
+      // Check if coming from email verification
+      const hash = window.location.hash;
+      if (hash.includes('access_token') ||
+          hash.includes('type=signup')) {
+        document.getElementById('welcomeState').style.display = 'block';
+      } else {
+        document.getElementById('alreadyState').style.display = 'block';
+      }
+    } else {
+      // Not logged in — redirect to login
+      window.location.href = '/login/';
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>
