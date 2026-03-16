@@ -1,0 +1,8 @@
+{
+  "name": "grailmessage-kenya",
+  "version": "1.0.0",
+  "description": "Grail Message Kenya — Alexander Bernhardt Publishing Company Kenya",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
