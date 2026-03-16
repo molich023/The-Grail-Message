@@ -957,7 +957,8 @@
     const btn = document.querySelector('#checkoutModal .btn-primary');
     if(btn) { btn.textContent = 'Processing...'; btn.disabled = true; }
     try {
-      const res = await fetch('/api/place-order', {
+      // Step 1: Save the order
+      const orderRes = await fetch('/api/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -966,18 +967,55 @@
           cart_items: cart.map(i => ({ title:i.title, price:i.price, qty:i.qty }))
         })
       });
-      const data = await res.json();
+      const orderData = await orderRes.json();
+      if(!orderData.success) { alert(orderData.error || 'Could not place order. Please try again.'); return; }
+
       closeModal('checkoutModal');
       cart = []; updateCartUI();
-      document.getElementById('thankYouModal').classList.add('open');
-      if(data.order_id && payMethod.includes('M-Pesa')) {
-        await fetch('/api/mpesa-payment', {
+
+      // Step 2: Route to correct payment method
+      if(payMethod === 'M-Pesa') {
+        // M-Pesa STK Push — prompt on phone
+        const mpesaRes = await fetch('/api/mpesa-payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, amount_ksh: data.total_ksh, order_id: data.order_id })
+          body: JSON.stringify({ phone, amount_ksh: orderData.total_ksh, order_id: orderData.order_id })
         });
+        const mpesaData = await mpesaRes.json();
+        if(mpesaData.success) {
+          alert('📱 M-Pesa prompt sent to ' + phone + '. Please enter your PIN to complete payment.');
+        }
+        document.getElementById('thankYouModal').classList.add('open');
+
+      } else if(payMethod === 'Visa/Mastercard') {
+        // Pesapal card payment — redirect to Pesapal
+        if(btn) { btn.textContent = 'Redirecting to Pesapal...'; }
+        const ppRes = await fetch('/api/pesapal-pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: name, email, phone,
+            order_id: orderData.order_id,
+            amount_ksh: orderData.total_ksh,
+            description: 'Grail Message Kenya — Book Order'
+          })
+        });
+        const ppData = await ppRes.json();
+        if(ppData.redirect_url) {
+          // Redirect customer to Pesapal secure payment page
+          window.location.href = ppData.redirect_url;
+        } else {
+          alert(ppData.error || 'Could not connect to Pesapal. Please use M-Pesa or call 0736-340024.');
+          document.getElementById('thankYouModal').classList.add('open');
+        }
+
+      } else {
+        // Bank Transfer — show thank you with instructions
+        document.getElementById('thankYouModal').classList.add('open');
       }
+
     } catch(err) {
+      console.error('confirmOrder error:', err);
       closeModal('checkoutModal');
       cart = []; updateCartUI();
       document.getElementById('thankYouModal').classList.add('open');
