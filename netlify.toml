@@ -3,13 +3,16 @@
 # Alexander Bernhardt Publishing Company Kenya
 # Security-hardened configuration
 # ══════════════════════════════════════════════════════════════════════
-
 [build]
   publish = "."
   functions = "netlify/functions"
+  command = "npm install"
 
 [functions]
   node_bundler = "esbuild"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
 
 # ══════════════════════════════════════════════════════════════════════
 # SECURITY HEADERS — Applied to every page on the site
