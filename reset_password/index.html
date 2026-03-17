@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reset Password — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root { --blue:#1a6aad; --dark:#0d2a42; --muted:#3a6a90; --light:#e8f4fd; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      min-height:100vh;
+      background:linear-gradient(135deg,#87ceeb 0%,#d4eefd 100%);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'EB Garamond',serif; padding:20px;
+    }
+    .card {
+      background:rgba(255,255,255,0.95);
+      border:2px solid rgba(26,106,173,0.2);
+      border-radius:14px; max-width:420px; width:100%;
+      overflow:hidden;
+      box-shadow:0 20px 60px rgba(26,106,173,0.15);
+    }
+    .card-header {
+      background:linear-gradient(135deg,#0d2a42,#1a6aad);
+      padding:35px 30px; text-align:center;
+    }
+    .symbol { font-size:2.2rem; color:#fff; margin-bottom:8px; }
+    .card-title {
+      font-family:'Cinzel',serif; font-size:1rem;
+      font-weight:700; color:#fff; letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .card-sub { font-size:.8rem; color:rgba(255,255,255,0.75); margin-top:5px; }
+    .card-body { padding:30px; }
+    .form-label {
+      display:block; font-family:'Cinzel',serif;
+      font-size:.68rem; letter-spacing:.15em;
+      text-transform:uppercase; color:var(--muted); margin-bottom:6px;
+    }
+    .form-input {
+      width:100%; padding:.8rem 1rem; margin-bottom:16px;
+      border:1.5px solid rgba(26,106,173,0.2); border-radius:6px;
+      font-size:.95rem; font-family:'EB Garamond',serif;
+      background:rgba(255,255,255,0.9); color:var(--dark);
+      outline:none; transition:border-color .3s;
+    }
+    .form-input:focus { border-color:var(--blue); }
+    .submit-btn {
+      width:100%; padding:.9rem;
+      background:linear-gradient(135deg,var(--dark),var(--blue));
+      color:#fff; border:none; border-radius:6px;
+      font-family:'Cinzel',serif; font-size:.82rem;
+      letter-spacing:.12em; cursor:pointer;
+      transition:opacity .3s; margin-top:4px;
+    }
+    .submit-btn:hover { opacity:.88; }
+    .submit-btn:disabled { opacity:.6; cursor:not-allowed; }
+    .msg-box {
+      padding:.75rem 1rem; border-radius:6px;
+      font-size:.85rem; margin-bottom:16px; display:none;
+    }
+    .msg-error   { background:#f8d7da; border:1px solid #f5c6cb; color:#721c24; }
+    .msg-success { background:#d1e7dd; border:1px solid #badbcc; color:#0a3622; }
+    .hint { font-size:.8rem; color:var(--muted); text-align:center; margin-top:15px; }
+    .loading { text-align:center; padding:30px; color:var(--muted); }
+    .spinner {
+      width:32px; height:32px;
+      border:3px solid rgba(26,106,173,0.2);
+      border-top-color:var(--blue); border-radius:50%;
+      animation:spin .8s linear infinite; margin:0 auto 15px;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .quote {
+      font-style:italic; font-size:.85rem; color:var(--muted);
+      text-align:center; padding:16px 20px;
+      background:var(--light); border-top:1px solid rgba(26,106,173,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="symbol">✦</div>
+    <p class="card-title">Grail Message Kenya</p>
+    <p class="card-sub">Reset Your Password</p>
+  </div>
+
+  <!-- Loading state -->
+  <div class="card-body" id="loadingState">
+    <div class="loading">
+      <div class="spinner"></div>
+      Verifying your reset link...
+    </div>
+  </div>
+
+  <!-- Reset form -->
+  <div class="card-body" id="resetState" style="display:none;">
+    <div class="msg-box msg-error"   id="resetError"></div>
+    <div class="msg-box msg-success" id="resetSuccess"></div>
+
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:20px;line-height:1.7;">
+      Enter your new password below. Make it strong —
+      at least 8 characters with letters and numbers.
+    </p>
+
+    <label class="form-label">New Password</label>
+    <input type="password" id="newPassword" class="form-input"
+      placeholder="Minimum 8 characters"/>
+
+    <label class="form-label">Confirm New Password</label>
+    <input type="password" id="confirmPassword" class="form-input"
+      placeholder="Type password again"
+      onkeydown="if(event.key==='Enter') doReset()"/>
+
+    <button class="submit-btn" id="resetBtn" onclick="doReset()">
+      🔐 Set New Password
+    </button>
+
+    <p class="hint">
+      <a href="/login/" style="color:var(--blue);">Back to Sign In</a>
+    </p>
+  </div>
+
+  <!-- Invalid link state -->
+  <div class="card-body" id="invalidState" style="display:none;">
+    <div class="msg-box msg-error" style="display:block;">
+      This reset link has expired or is invalid.
+      Please request a new one.
+    </div>
+    <a href="/login/" style="
+      display:block; text-align:center; margin-top:15px;
+      font-family:'Cinzel',serif; font-size:.8rem;
+      color:var(--blue); text-decoration:none;
+      letter-spacing:.1em;">
+      ← Back to Login
+    </a>
+  </div>
+
+  <div class="quote">
+    "Seek the Truth and the Truth will set you free."<br/>
+    <em>— Abd-ru-shin</em>
+  </div>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════════════════
+  // SUPABASE CONFIG — reset-password/index.html
+  // LINE A: Project URL — already correct
+  // LINE B: Replace with your anon key
+  // ══════════════════════════════════════════════════════════
+  const SUPABASE_URL  = 'https://ecxdrwomkxcuxlhqdtum.supabase.co'; // ← LINE A
+  const SUPABASE_ANON = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l';                // ← LINE B ★ EDIT
+  // ══════════════════════════════════════════════════════════
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  function hide(id) { document.getElementById(id).style.display = 'none'; }
+  function show(id) { document.getElementById(id).style.display = 'block'; }
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className   = 'msg-box msg-' + type;
+    el.style.display = 'block';
+  }
+
+  async function init() {
+    // Supabase handles the token from the URL hash automatically
+    // Listen for the PASSWORD_RECOVERY event
+    sb.auth.onAuthStateChange(async (event, session) => {
+      hide('loadingState');
+
+      if (event === 'PASSWORD_RECOVERY') {
+        // Valid reset link — show the form
+        show('resetState');
+      } else if (event === 'SIGNED_IN' && window.location.hash.includes('type=recovery')) {
+        show('resetState');
+      } else {
+        // Check if there is a valid session from the URL
+        const hash = window.location.hash;
+        if (hash.includes('access_token') && hash.includes('type=recovery')) {
+          show('resetState');
+        } else if (!hash.includes('access_token')) {
+          // No token — invalid link
+          show('invalidState');
+        } else {
+          show('resetState');
+        }
+      }
+    });
+
+    // Small delay to allow Supabase to process URL hash
+    setTimeout(() => {
+      const hash = window.location.hash;
+      if (!hash.includes('access_token')) {
+        hide('loadingState');
+        show('invalidState');
+      }
+    }, 3000);
+  }
+
+  async function doReset() {
+    const newPass     = document.getElementById('newPassword').value;
+    const confirmPass = document.getElementById('confirmPassword').value;
+    const btn         = document.getElementById('resetBtn');
+
+    document.getElementById('resetError').style.display   = 'none';
+    document.getElementById('resetSuccess').style.display = 'none';
+
+    // Validate
+    if (!newPass || !confirmPass) {
+      showMsg('resetError', 'Please fill in both password fields.', 'error');
+      return;
+    }
+
+    if (newPass.length < 8) {
+      showMsg('resetError', 'Password must be at least 8 characters.', 'error');
+      return;
+    }
+
+    if (newPass !== confirmPass) {
+      showMsg('resetError', 'Passwords do not match. Please try again.', 'error');
+      return;
+    }
+
+    btn.textContent = 'Updating...';
+    btn.disabled    = true;
+
+    try {
+      const { error } = await sb.auth.updateUser({ password: newPass });
+
+      if (error) {
+        showMsg('resetError', error.message, 'error');
+        btn.textContent = '🔐 Set New Password';
+        btn.disabled    = false;
+        return;
+      }
+
+      // Success
+      showMsg(
+        'resetSuccess',
+        '✅ Password updated successfully! Taking you to login...',
+        'success'
+      );
+
+      // Sign out and redirect to login after 2 seconds
+      setTimeout(async () => {
+        await sb.auth.signOut();
+        window.location.replace('/login/');
+      }, 2000);
+
+    } catch(err) {
+      showMsg('resetError', err.message || 'Could not update password. Please try again.', 'error');
+      btn.textContent = '🔐 Set New Password';
+      btn.disabled    = false;
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
