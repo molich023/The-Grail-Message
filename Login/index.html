@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --blue: #1a6aad; --dark: #0d2a42;
+      --muted: #3a6a90; --light: #e8f4fd;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #87ceeb 0%, #d4eefd 100%);
+      display: flex; align-items: center;
+      justify-content: center;
+      font-family: 'EB Garamond', serif;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.95);
+      border: 2px solid rgba(26,106,173,0.2);
+      border-radius: 14px;
+      width: 100%; max-width: 440px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(26,106,173,0.15);
+    }
+    .card-header {
+      background: linear-gradient(135deg, #0d2a42, #1a6aad);
+      padding: 35px 30px; text-align: center;
+    }
+    .card-symbol { font-size: 2.2rem; color: #fff; margin-bottom: 8px; }
+    .card-title {
+      font-family: 'Cinzel', serif; font-size: 1rem;
+      font-weight: 700; color: #fff; letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .card-sub { font-size: .8rem; color: rgba(255,255,255,0.75); margin-top: 5px; }
+    .tab-row { display: flex; border-bottom: 2px solid rgba(26,106,173,0.1); }
+    .tab {
+      flex: 1; padding: 14px; text-align: center;
+      font-family: 'Cinzel', serif; font-size: .72rem;
+      letter-spacing: .15em; text-transform: uppercase;
+      cursor: pointer; color: var(--muted);
+      background: none; border: none;
+      border-bottom: 3px solid transparent;
+      transition: all .2s;
+    }
+    .tab.active { color: var(--blue); border-bottom-color: var(--blue); background: rgba(26,106,173,0.04); }
+    .card-body { padding: 30px; }
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+    .form-label {
+      display: block; font-family: 'Cinzel', serif;
+      font-size: .68rem; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%; padding: .8rem 1rem; margin-bottom: 16px;
+      border: 1.5px solid rgba(26,106,173,0.2); border-radius: 6px;
+      font-size: .95rem; font-family: 'EB Garamond', serif;
+      background: rgba(255,255,255,0.9); color: var(--dark);
+      outline: none; transition: border-color .3s;
+    }
+    .form-input:focus { border-color: var(--blue); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .submit-btn {
+      width: 100%; padding: .9rem;
+      background: linear-gradient(135deg, var(--dark), var(--blue));
+      color: #fff; border: none; border-radius: 6px;
+      font-family: 'Cinzel', serif; font-size: .82rem;
+      letter-spacing: .12em; cursor: pointer;
+      transition: opacity .3s; margin-top: 4px;
+    }
+    .submit-btn:hover { opacity: .88; }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .msg-box {
+      padding: .75rem 1rem; border-radius: 6px;
+      font-size: .85rem; margin-bottom: 16px; display: none;
+    }
+    .msg-error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    .msg-success { background: #d1e7dd; border: 1px solid #badbcc; color: #0a3622; }
+    .divider { border: none; border-top: 1px solid rgba(26,106,173,0.1); margin: 20px 0; }
+    .hint { font-size: .8rem; color: var(--muted); text-align: center; line-height: 1.6; }
+    .quote {
+      font-style: italic; font-size: .85rem; color: var(--muted);
+      text-align: center; padding: 16px 20px;
+      background: var(--light); border-top: 1px solid rgba(26,106,173,0.1);
+    }
+    @media(max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* hCaptcha widget */
+    .h-captcha {
+      margin: 8px 0 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .captcha-note {
+      font-size: .75rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+  </style>
+  <!-- hCaptcha SDK -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-symbol">✦</div>
+    <p class="card-title">Grail Message Kenya</p>
+    <p class="card-sub">Alexander Bernhardt Publishing Company Kenya</p>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" id="tabSignup" onclick="switchTab('signup')">Create Account</button>
+  </div>
+
+  <div class="card-body">
+
+    <!-- LOGIN FORM -->
+    <div class="form-panel active" id="panelLogin">
+      <div class="msg-box msg-error"   id="loginError"></div>
+      <div class="msg-box msg-success" id="loginSuccess"></div>
+
+      <label class="form-label">Email Address</label>
+      <input type="email" id="loginEmail" class="form-input"
+        placeholder="your@email.com" autocomplete="email"/>
+
+      <label class="form-label">Password</label>
+      <input type="password" id="loginPassword" class="form-input"
+        placeholder="Your password" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') doLogin()"/>
+
+      <button class="submit-btn" id="loginBtn" onclick="doLogin()">
+        🔐 Sign In
+      </button>
+
+      <hr class="divider"/>
+      <p class="hint">
+        <a href="#" onclick="showForgotPassword()"
+          style="color:var(--blue);">
+          Forgot your password?
+        </a>
+      </p>
+      <p class="hint" style="margin-top:.5rem;">
+        Don't have an account?
+        <a href="#" onclick="switchTab('signup')" style="color:var(--blue);">
+          Create one here
+        </a>
+      </p>
+    </div>
+
+    <!-- FORGOT PASSWORD PANEL -->
+    <div class="form-panel" id="panelForgot">
+      <div class="msg-box msg-error"   id="forgotError"></div>
+      <div class="msg-box msg-success" id="forgotSuccess"></div>
+
+      <p style="font-size:.9rem;color:var(--muted);margin-bottom:20px;line-height:1.7;">
+        Enter your email address below and we will send you
+        a link to reset your password.
+      </p>
+
+      <label class="form-label">Email Address</label>
+      <input type="email" id="forgotEmail" class="form-input"
+        placeholder="your@email.com"
+        onkeydown="if(event.key==='Enter') doForgotPassword()"/>
+
+      <button class="submit-btn" id="forgotBtn"
+        onclick="doForgotPassword()">
+        📧 Send Reset Link
+      </button>
+
+      <hr class="divider"/>
+      <p class="hint">
+        Remembered it?
+        <a href="#" onclick="switchTab('login')" style="color:var(--blue);">
+          Back to Sign In
+        </a>
+      </p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div class="form-panel" id="panelSignup">
+      <div class="msg-box msg-error"   id="signupError"></div>
+      <div class="msg-box msg-success" id="signupSuccess"></div>
+
+      <div class="form-row">
+        <div>
+          <label class="form-label">First Name *</label>
+          <input type="text" id="signupFirst" class="form-input" placeholder="First name"/>
+        </div>
+        <div>
+          <label class="form-label">Last Name *</label>
+          <input type="text" id="signupLast" class="form-input" placeholder="Last name"/>
+        </div>
+      </div>
+
+      <label class="form-label">Email Address *</label>
+      <input type="email" id="signupEmail" class="form-input"
+        placeholder="your@email.com" autocomplete="email"/>
+
+      <label class="form-label">Phone Number *</label>
+      <input type="tel" id="signupPhone" class="form-input" placeholder="07XX XXX XXX"/>
+
+      <label class="form-label">City *</label>
+      <input type="text" id="signupCity" class="form-input" placeholder="Your city or town"/>
+
+      <label class="form-label">Password * (min 8 characters)</label>
+      <input type="password" id="signupPassword" class="form-input"
+        placeholder="Minimum 8 characters"/>
+
+      <!-- hCaptcha widget — appears on signup only -->
+      <p class="captcha-note">
+        Please complete the security check below
+      </p>
+      <div class="h-captcha"
+        data-sitekey="REPLACE_WITH_YOUR_HCAPTCHA_SITE_KEY"
+        data-callback="onCaptchaSuccess"
+        data-expired-callback="onCaptchaExpired"
+        id="hcaptchaWidget">
+      </div>
+
+      <button class="submit-btn" id="signupBtn"
+        onclick="doSignup()" disabled>
+        ✦ Create My Account
+      </button>
+
+      <hr class="divider"/>
+      <p class="hint">
+        Already have an account?
+        <a href="#" onclick="switchTab('login')" style="color:var(--blue);">
+          Sign in here
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+  <div class="quote">
+    "Seek the Truth and the Truth will set you free."<br/>
+    <em>— Abd-ru-shin</em>
+  </div>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════════════════
+  // SUPABASE CONFIG — login/index.html
+  // LINE 1 OF 2: Replace the URL below with your Project URL
+  // LINE 2 OF 2: Replace the key below with your anon public key
+  // Both found at: Supabase → Settings → API
+  // ══════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════
+  // CONFIG — Replace values marked ★ with your own
+  // ══════════════════════════════════════════════════════
+  const SUPABASE_URL   = 'https://ecxdrwomkxcuxlhqdtum.supabase.co'; // Already correct
+  const SUPABASE_ANON  = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l';                // ★ LINE 1: Paste anon key
+  const HCAPTCHA_KEY   = 'df62c23a-e6f4-4b84-9a08-ecd888b4a64e';       // ★ LINE 2: Paste hCaptcha site key
+  // ══════════════════════════════════════════════════════
+
+  // hCaptcha token storage
+  let captchaToken = null;
+
+  // Called by hCaptcha when user passes
+  function onCaptchaSuccess(token) {
+    captchaToken = token;
+    const btn = document.getElementById('signupBtn');
+    if (btn) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  }
+
+  // Called when hCaptcha token expires
+  function onCaptchaExpired() {
+    captchaToken = null;
+    const btn = document.getElementById('signupBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.style.opacity = '.6';
+    }
+  }
+  // ══════════════════════════════════════════════════════════
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // ── Check if already logged in ──────────────────────────
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      window.location.replace('/');
+    }
+  }
+
+  // ── Tab switcher ────────────────────────────────────────
+  function switchTab(tab) {
+    ['login','signup','forgot'].forEach(t => {
+      const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+      if (panel) panel.classList.toggle('active', t === tab);
+    });
+    document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+    document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+  }
+
+  function showForgotPassword() {
+    ['panelLogin','panelSignup'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    document.getElementById('panelForgot').classList.add('active');
+    document.getElementById('tabLogin').classList.remove('active');
+    document.getElementById('tabSignup').classList.remove('active');
+  }
+
+  // ── Show message helper ─────────────────────────────────
+  function showMsg(id, text, type = 'error') {
+    const el = document.getElementById(id);
+    el.textContent   = text;
+    el.style.display = 'block';
+    el.className     = `msg-box msg-${type}`;
+  }
+  function hideMsg(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  // ── Login ────────────────────────────────────────────────
+  async function doLogin() {
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn      = document.getElementById('loginBtn');
+
+    hideMsg('loginError');
+    hideMsg('loginSuccess');
+
+    // Validate inputs
+    if (!email || !password) {
+      showMsg('loginError', 'Please enter your email and password.');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      showMsg('loginError', 'Please enter a valid email address.');
+      return;
+    }
+
+    btn.textContent = 'Signing in...';
+    btn.disabled    = true;
+
+    try {
+      // Set a timeout so it never hangs forever
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out. Please check your connection and try again.')), 10000)
+      );
+
+      const loginPromise = sb.auth.signInWithPassword({ email, password });
+
+      // Race between login and timeout
+      const { data, error } = await Promise.race([loginPromise, timeoutPromise]);
+
+      if (error) {
+        // Show friendly error messages
+        let msg = error.message;
+        if (msg.includes('Invalid login credentials')) {
+          msg = 'Incorrect email or password. Please try again.';
+        } else if (msg.includes('Email not confirmed')) {
+          msg = 'Please verify your email first. Check your inbox for the verification link.';
+        } else if (msg.includes('Too many requests')) {
+          msg = 'Too many attempts. Please wait a few minutes and try again.';
+        } else if (msg.includes('Network')) {
+          msg = 'Network error. Please check your internet connection.';
+        }
+        showMsg('loginError', msg);
+        btn.textContent = '🔐 Sign In';
+        btn.disabled    = false;
+        return;
+      }
+
+      // Success
+      showMsg('loginSuccess', 'Welcome back! Taking you in...', 'success');
+      setTimeout(() => { window.location.replace('/'); }, 1200);
+
+    } catch (err) {
+      // Catch timeout and any other errors
+      showMsg('loginError', err.message || 'Something went wrong. Please try again.');
+      btn.textContent = '🔐 Sign In';
+      btn.disabled    = false;
+    }
+  }
+
+  // ── Sign Up ──────────────────────────────────────────────
+  async function doSignup() {
+    const firstName = document.getElementById('signupFirst').value.trim();
+    const lastName  = document.getElementById('signupLast').value.trim();
+    const email     = document.getElementById('signupEmail').value.trim();
+    const phone     = document.getElementById('signupPhone').value.trim();
+    const city      = document.getElementById('signupCity').value.trim();
+    const password  = document.getElementById('signupPassword').value;
+    const btn       = document.getElementById('signupBtn');
+
+    hideMsg('signupError');
+    hideMsg('signupSuccess');
+
+    if (!firstName || !lastName || !email || !phone || !city || !password) {
+      showMsg('signupError', 'Please fill in all required fields.');
+      return;
+    }
+    if (password.length < 8) {
+      showMsg('signupError', 'Password must be at least 8 characters.');
+      return;
+    }
+
+    btn.textContent = 'Creating account...';
+    btn.disabled    = true;
+
+    // Check captcha token
+    if (!captchaToken) {
+      showMsg('signupError', 'Please complete the security check.', 'error');
+      btn.textContent = '✦ Create My Account';
+      btn.disabled    = false;
+      return;
+    }
+
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { first_name: firstName, last_name: lastName, phone, city },
+        emailRedirectTo: 'https://grailmessagekenya.netlify.app/welcome/',
+        captchaToken: captchaToken
+      }
+    });
+
+    if (error) {
+      showMsg('signupError', error.message);
+      btn.textContent = '✦ Create My Account';
+      btn.disabled    = false;
+      return;
+    }
+
+    // Save to subscribers table
+    await sb.from('subscribers').insert([{
+      first_name: firstName, last_name: lastName,
+      email, phone, city, country: 'Kenya'
+    }]).then(() => {}).catch(() => {});
+
+    showMsg(
+      'signupSuccess',
+      `✅ Account created! A verification email has been sent to ${email}. ` +
+      `Please check your inbox and click the link to activate your account.`,
+      'success'
+    );
+
+    // Reset captcha after use
+    if (window.hcaptcha) {
+      window.hcaptcha.reset();
+    }
+    captchaToken = null;
+    btn.disabled = true;
+    btn.textContent = '✦ Create My Account';
+  }
+
+  // ── Forgot Password ─────────────────────────────────────
+  async function doForgotPassword() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    const btn   = document.getElementById('forgotBtn');
+
+    hideMsg('forgotError');
+    hideMsg('forgotSuccess');
+
+    if (!email) {
+      showMsg('forgotError', 'Please enter your email address.', 'error');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      showMsg('forgotError', 'Please enter a valid email address.', 'error');
+      return;
+    }
+
+    btn.textContent = 'Sending...';
+    btn.disabled    = true;
+
+    try {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out. Please try again.')), 10000)
+      );
+
+      const resetPromise = sb.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://grailmessagekenya.netlify.app/reset-password/'
+      });
+
+      await Promise.race([resetPromise, timeoutPromise]);
+
+      // Always show success — do not confirm if email exists (security)
+      showMsg(
+        'forgotSuccess',
+        '✅ If an account exists for ' + email + ', a password reset link has been sent. Please check your inbox and spam folder.',
+        'success'
+      );
+
+      document.getElementById('forgotEmail').value = '';
+
+    } catch(err) {
+      showMsg('forgotError', err.message || 'Could not send reset email. Please try again.', 'error');
+    } finally {
+      btn.textContent = '📧 Send Reset Link';
+      btn.disabled    = false;
+    }
+  }
+
+  // ── Check config before init ──────────────────────────
+  if (SUPABASE_ANON === 'REPLACE_WITH_YOUR_ANON_KEY' || SUPABASE_ANON === '') {
+    document.body.innerHTML = '<div style="padding:2rem;text-align:center;font-family:Georgia,serif;color:#721c24;background:#f8d7da;min-height:100vh;display:flex;align-items:center;justify-content:center;"><div><h2>Configuration Required</h2><p style="margin-top:1rem;">Supabase anon key not set.<br/>Please add your key to this file on line 233.</p></div></div>';
+  } else {
+    // Update hCaptcha sitekey dynamically if needed
+    const widget = document.getElementById('hcaptchaWidget');
+    if (widget && HCAPTCHA_KEY !== 'REPLACE_WITH_YOUR_HCAPTCHA_SITE_KEY') {
+      widget.setAttribute('data-sitekey', HCAPTCHA_KEY);
+    }
+    init();
+  }
+</script>
+</body>
+</html>
