@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root { --blue:#1a6aad; --dark:#0d2a42; --muted:#3a6a90; --light:#e8f4fd; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#87ceeb 0%,#d4eefd 100%);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'EB Garamond',serif;padding:20px;
+    }
+    .card{
+      background:rgba(255,255,255,0.95);
+      border:2px solid rgba(26,106,173,0.2);
+      border-radius:14px;width:100%;max-width:440px;
+      overflow:hidden;
+      box-shadow:0 20px 60px rgba(26,106,173,0.15);
+    }
+    .hdr{
+      background:linear-gradient(135deg,#0d2a42,#1a6aad);
+      padding:35px 30px;text-align:center;
+    }
+    .sym{font-size:2.2rem;color:#fff;margin-bottom:8px;}
+    .ttl{
+      font-family:'Cinzel',serif;font-size:1rem;
+      font-weight:700;color:#fff;letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .sub{font-size:.8rem;color:rgba(255,255,255,0.75);margin-top:5px;}
+    .tabs{display:flex;border-bottom:2px solid rgba(26,106,173,0.1);}
+    .tab{
+      flex:1;padding:14px;text-align:center;
+      font-family:'Cinzel',serif;font-size:.72rem;
+      letter-spacing:.15em;text-transform:uppercase;
+      cursor:pointer;color:var(--muted);
+      background:none;border:none;
+      border-bottom:3px solid transparent;transition:all .2s;
+    }
+    .tab.on{color:var(--blue);border-bottom-color:var(--blue);background:rgba(26,106,173,0.04);}
+    .body{padding:30px;}
+    .pnl{display:none;}
+    .pnl.on{display:block;}
+    .lbl{
+      display:block;font-family:'Cinzel',serif;
+      font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:6px;
+    }
+    .inp{
+      width:100%;padding:.8rem 1rem;margin-bottom:14px;
+      border:1.5px solid rgba(26,106,173,0.2);border-radius:6px;
+      font-size:.95rem;font-family:'EB Garamond',serif;
+      background:rgba(255,255,255,0.9);color:var(--dark);
+      outline:none;transition:border-color .3s;
+    }
+    .inp:focus{border-color:var(--blue);}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .btn{
+      width:100%;padding:.9rem;
+      background:linear-gradient(135deg,var(--dark),var(--blue));
+      color:#fff;border:none;border-radius:6px;
+      font-family:'Cinzel',serif;font-size:.82rem;
+      letter-spacing:.12em;cursor:pointer;transition:opacity .3s;
+    }
+    .btn:hover{opacity:.88;}
+    .btn:disabled{opacity:.55;cursor:not-allowed;}
+    .msg{
+      padding:.75rem 1rem;border-radius:6px;
+      font-size:.85rem;margin-bottom:14px;display:none;
+      line-height:1.6;
+    }
+    .err{background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;}
+    .ok {background:#d1e7dd;border:1px solid #badbcc;color:#0a3622;}
+    .inf{background:#cfe2ff;border:1px solid #b6d4fe;color:#084298;}
+    .hr{border:none;border-top:1px solid rgba(26,106,173,0.1);margin:18px 0;}
+    .hint{font-size:.8rem;color:var(--muted);text-align:center;line-height:1.8;}
+    .hint a{color:var(--blue);cursor:pointer;text-decoration:none;}
+    .hint a:hover{text-decoration:underline;}
+    .quote{
+      font-style:italic;font-size:.85rem;color:var(--muted);
+      text-align:center;padding:16px 20px;
+      background:var(--light);
+      border-top:1px solid rgba(26,106,173,0.1);
+    }
+    .status-bar{
+      background:#fff3cd;border-top:1px solid #ffc107;
+      padding:8px 20px;text-align:center;
+      font-size:.75rem;color:#856404;
+      display:none;
+    }
+    @media(max-width:480px){.row2{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- Status bar — shows connection issues -->
+  <div class="status-bar" id="statusBar"></div>
+
+  <!-- Header -->
+  <div class="hdr">
+    <div class="sym">✦</div>
+    <p class="ttl">Grail Message Kenya</p>
+    <p class="sub">Alexander Bernhardt Publishing Company Kenya</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab on" id="tLogin"
+      onclick="goTab('login')">Sign In</button>
+    <button class="tab" id="tSignup"
+      onclick="goTab('signup')">Create Account</button>
+  </div>
+
+  <div class="body">
+
+    <!-- SIGN IN -->
+    <div class="pnl on" id="pLogin">
+      <div class="msg err" id="eL"></div>
+      <div class="msg ok"  id="sL"></div>
+
+      <label class="lbl">Email Address</label>
+      <input type="email" id="lEmail" class="inp"
+        placeholder="your@email.com" autocomplete="email"/>
+
+      <label class="lbl">Password</label>
+      <input type="password" id="lPass" class="inp"
+        placeholder="Your password"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()"/>
+
+      <button class="btn" id="bLogin" onclick="doLogin()">
+        🔐 Sign In
+      </button>
+      <hr class="hr"/>
+      <p class="hint">
+        <a onclick="goTab('forgot')">Forgot password?</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        No account? <a onclick="goTab('signup')">Create one</a>
+      </p>
+    </div>
+
+    <!-- CREATE ACCOUNT -->
+    <div class="pnl" id="pSignup">
+      <div class="msg err" id="eS"></div>
+      <div class="msg ok"  id="sS"></div>
+
+      <div class="row2">
+        <div>
+          <label class="lbl">First Name *</label>
+          <input type="text" id="sFirst" class="inp" placeholder="First name"/>
+        </div>
+        <div>
+          <label class="lbl">Last Name *</label>
+          <input type="text" id="sLast" class="inp" placeholder="Last name"/>
+        </div>
+      </div>
+
+      <label class="lbl">Email Address *</label>
+      <input type="email" id="sEmail" class="inp"
+        placeholder="your@email.com" autocomplete="email"/>
+
+      <label class="lbl">Phone Number *</label>
+      <input type="tel" id="sPhone" class="inp"
+        placeholder="07XX XXX XXX"/>
+
+      <label class="lbl">City *</label>
+      <input type="text" id="sCity" class="inp"
+        placeholder="Your city or town"/>
+
+      <label class="lbl">Password * (min 8 characters)</label>
+      <input type="password" id="sPass" class="inp"
+        placeholder="Minimum 8 characters"/>
+
+      <button class="btn" id="bSignup" onclick="doSignup()">
+        ✦ Create My Account
+      </button>
+      <hr class="hr"/>
+      <p class="hint">
+        Already have an account?
+        <a onclick="goTab('login')">Sign in here</a>
+      </p>
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div class="pnl" id="pForgot">
+      <div class="msg err" id="eF"></div>
+      <div class="msg ok"  id="sF"></div>
+      <p style="font-size:.9rem;color:var(--muted);margin-bottom:18px;line-height:1.7;">
+        Enter your email and we will send you a
+        password reset link.
+      </p>
+      <label class="lbl">Email Address</label>
+      <input type="email" id="fEmail" class="inp"
+        placeholder="your@email.com"
+        onkeydown="if(event.key==='Enter')doForgot()"/>
+      <button class="btn" id="bForgot" onclick="doForgot()">
+        📧 Send Reset Link
+      </button>
+      <hr class="hr"/>
+      <p class="hint">
+        <a onclick="goTab('login')">← Back to Sign In</a>
+      </p>
+    </div>
+
+  </div>
+
+  <div class="quote">
+    "Seek the Truth and the Truth will set you free."<br/>
+    <em>— Abd-ru-shin</em>
+  </div>
+</div>
+
+<script>
+// ╔══════════════════════════════════════════════════════╗
+// ║  CONFIGURATION — Edit the two lines below           ║
+// ║                                                      ║
+// ║  Get your anon key from:                            ║
+// ║  Supabase → Settings → API → anon public            ║
+// ╚══════════════════════════════════════════════════════╝
+
+var URL = 'https://ecxdrwomkxcuxlhqdtum.supabase.co'; // ← correct already
+var KEY = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l'; // ← ★ REPLACE THIS WITH YOUR ANON KEY
+
+// ╔══════════════════════════════════════════════════════╗
+// ║  DO NOT EDIT BELOW THIS LINE                        ║
+// ╚══════════════════════════════════════════════════════╝
+
+// Check SDK loaded
+if (typeof window.supabase === 'undefined') {
+  document.body.innerHTML =
+    '<div style="padding:2rem;text-align:center;color:#721c24;' +
+    'background:#f8d7da;min-height:100vh;display:flex;' +
+    'align-items:center;justify-content:center;">' +
+    '<div><h2>Loading Error</h2>' +
+    '<p>Supabase SDK failed to load.<br/>' +
+    'Please check your internet connection and refresh.</p>' +
+    '</div></div>';
+  throw new Error('Supabase SDK not loaded');
+}
+
+// Check key configured
+if (!KEY || KEY === 'YOUR_ANON_KEY_HERE') {
+  document.body.innerHTML =
+    '<div style="padding:2rem;text-align:center;color:#721c24;' +
+    'background:#f8d7da;min-height:100vh;display:flex;' +
+    'align-items:center;justify-content:center;">' +
+    '<div><h2>Setup Required</h2>' +
+    '<p style="margin-top:1rem;">Please add your Supabase anon key to this file.<br/>' +
+    'Find it at: Supabase → Settings → API → anon public</p>' +
+    '</div></div>';
+  throw new Error('Anon key not configured');
+}
+
+// Create client
+var sb = window.supabase.createClient(URL, KEY);
+
+// Connection check
+function checkConnection() {
+  var bar = document.getElementById('statusBar');
+  sb.from('books').select('id').limit(1)
+    .then(function(r) {
+      if (r.error) {
+        bar.textContent = '⚠️ Connection issue: ' + r.error.message;
+        bar.style.display = 'block';
+      } else {
+        bar.style.display = 'none';
+      }
+    })
+    .catch(function() {
+      bar.textContent = '⚠️ Cannot reach server. Check your connection.';
+      bar.style.display = 'block';
+    });
+}
+
+// Check existing session
+sb.auth.getSession()
+  .then(function(r) {
+    if (r.data && r.data.session) {
+      window.location.replace('/');
+    }
+  })
+  .catch(function(e) {
+    console.log('Session check:', e.message);
+  });
+
+// Run connection check on load
+checkConnection();
+
+// ── Tab navigation ────────────────────────────────────
+function goTab(t) {
+  var tabs   = ['login','signup','forgot'];
+  var tabIds = ['tLogin','tSignup'];
+  tabs.forEach(function(name) {
+    var p = document.getElementById('p' + cap(name));
+    if (p) p.classList.toggle('on', name === t);
+  });
+  tabIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle('on',
+      (t === 'login' && id === 'tLogin') ||
+      (t === 'signup' && id === 'tSignup')
+    );
+  });
+}
+
+function cap(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// ── Message helpers ───────────────────────────────────
+function show(id, txt, type) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent   = txt;
+  el.className     = 'msg ' + type;
+  el.style.display = 'block';
+}
+
+function hide(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function setBtn(id, txt, enabled) {
+  var b = document.getElementById(id);
+  if (!b) return;
+  b.textContent = txt;
+  b.disabled    = !enabled;
+}
+
+// ── Friendly error messages ───────────────────────────
+function friendlyError(msg) {
+  if (!msg) return 'Something went wrong. Please try again.';
+  if (msg.indexOf('Invalid login') > -1 || msg.indexOf('invalid_credentials') > -1) {
+    return 'Incorrect email or password. Please try again.';
+  }
+  if (msg.indexOf('not confirmed') > -1 || msg.indexOf('email_not_confirmed') > -1) {
+    return 'Please verify your email first. Check your inbox for a verification link.';
+  }
+  if (msg.indexOf('Too many') > -1 || msg.indexOf('rate_limit') > -1) {
+    return 'Too many attempts. Please wait a few minutes before trying again.';
+  }
+  if (msg.indexOf('timed out') > -1 || msg.indexOf('timeout') > -1) {
+    return 'Connection timed out. Please check your internet and try again.';
+  }
+  if (msg.indexOf('network') > -1 || msg.indexOf('fetch') > -1) {
+    return 'Network error. Please check your internet connection.';
+  }
+  if (msg.indexOf('already registered') > -1 || msg.indexOf('already exists') > -1) {
+    return 'This email is already registered. Please sign in instead.';
+  }
+  if (msg.indexOf('Password') > -1 || msg.indexOf('password') > -1) {
+    return 'Password is too weak or has been found in a data breach. Please choose a stronger password.';
+  }
+  return msg;
+}
+
+// ── LOGIN ─────────────────────────────────────────────
+function doLogin() {
+  var email = (document.getElementById('lEmail').value || '').trim();
+  var pass  = document.getElementById('lPass').value || '';
+
+  hide('eL'); hide('sL');
+
+  if (!email || !pass) {
+    show('eL', 'Please enter your email and password.', 'err');
+    return;
+  }
+  if (email.indexOf('@') === -1) {
+    show('eL', 'Please enter a valid email address.', 'err');
+    return;
+  }
+
+  setBtn('bLogin', 'Signing in...', false);
+  show('eL', '', 'inf');
+  hide('eL');
+
+  sb.auth.signInWithPassword({
+    email:    email,
+    password: pass
+  })
+  .then(function(result) {
+    setBtn('bLogin', '🔐 Sign In', true);
+
+    if (result.error) {
+      show('eL', friendlyError(result.error.message), 'err');
+      return;
+    }
+
+    show('sL', '✅ Welcome back! Taking you in...', 'ok');
+    setTimeout(function() {
+      window.location.replace('/');
+    }, 1000);
+  })
+  .catch(function(err) {
+    setBtn('bLogin', '🔐 Sign In', true);
+    show('eL', friendlyError(err.message), 'err');
+  });
+}
+
+// ── SIGN UP ───────────────────────────────────────────
+function doSignup() {
+  var first = (document.getElementById('sFirst').value || '').trim();
+  var last  = (document.getElementById('sLast').value  || '').trim();
+  var email = (document.getElementById('sEmail').value || '').trim();
+  var phone = (document.getElementById('sPhone').value || '').trim();
+  var city  = (document.getElementById('sCity').value  || '').trim();
+  var pass  = document.getElementById('sPass').value   || '';
+
+  hide('eS'); hide('sS');
+
+  if (!first||!last||!email||!phone||!city||!pass) {
+    show('eS', 'Please fill in all required fields.', 'err');
+    return;
+  }
+  if (email.indexOf('@') === -1) {
+    show('eS', 'Please enter a valid email address.', 'err');
+    return;
+  }
+  if (pass.length < 8) {
+    show('eS', 'Password must be at least 8 characters.', 'err');
+    return;
+  }
+
+  setBtn('bSignup', 'Creating account...', false);
+
+  sb.auth.signUp({
+    email:    email,
+    password: pass,
+    options: {
+      data: {
+        first_name: first,
+        last_name:  last,
+        phone:      phone,
+        city:       city
+      },
+      emailRedirectTo:
+        'https://grailmessagekenya.netlify.app/welcome/'
+    }
+  })
+  .then(function(result) {
+    setBtn('bSignup', '✦ Create My Account', true);
+
+    if (result.error) {
+      show('eS', friendlyError(result.error.message), 'err');
+      return;
+    }
+
+    // Save to subscribers table
+    sb.from('subscribers').insert([{
+      first_name: first,
+      last_name:  last,
+      email:      email,
+      phone:      phone,
+      city:       city,
+      country:    'Kenya'
+    }])
+    .then(function(){})
+    .catch(function(){});
+
+    show('sS',
+      '✅ Account created! A verification email has been sent to ' +
+      email + '. Please check your inbox and click the link.',
+      'ok'
+    );
+  })
+  .catch(function(err) {
+    setBtn('bSignup', '✦ Create My Account', true);
+    show('eS', friendlyError(err.message), 'err');
+  });
+}
+
+// ── FORGOT PASSWORD ───────────────────────────────────
+function doForgot() {
+  var email = (document.getElementById('fEmail').value || '').trim();
+
+  hide('eF'); hide('sF');
+
+  if (!email || email.indexOf('@') === -1) {
+    show('eF', 'Please enter a valid email address.', 'err');
+    return;
+  }
+
+  setBtn('bForgot', 'Sending...', false);
+
+  sb.auth.resetPasswordForEmail(email, {
+    redirectTo:
+      'https://grailmessagekenya.netlify.app/reset-password/'
+  })
+  .then(function() {
+    setBtn('bForgot', '📧 Send Reset Link', true);
+    show('sF',
+      '✅ If an account exists for ' + email +
+      ', a reset link has been sent. Please check your inbox and spam folder.',
+      'ok'
+    );
+    document.getElementById('fEmail').value = '';
+  })
+  .catch(function(err) {
+    setBtn('bForgot', '📧 Send Reset Link', true);
+    show('eF', friendlyError(err.message), 'err');
+  });
+}
+</script>
+</body>
+</html>
