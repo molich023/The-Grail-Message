@@ -72,3 +72,7 @@
   from   = "/*"
   to     = "/index.html"
   status = 200
+
+# ── Keep Supabase project active ──
+[functions."keep-alive"]
+  schedule = "@daily"
