@@ -1,0 +1,104 @@
+# ══════════════════════════════════════════════════════════════════════
+# NETLIFY CONFIGURATION — Grail Message Kenya
+# Alexander Bernhardt Publishing Company Kenya
+# Updated: Supabase Auth + Functions fix
+# ══════════════════════════════════════════════════════════════════════
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  command = "npm install"
+
+[functions]
+  node_bundler = "esbuild"
+
+# ── Install Supabase dependency for functions ──
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
+# ══════════════════════════════════════════════════════════════════════
+# SECURITY HEADERS
+# ══════════════════════════════════════════════════════════════════════
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://api.safaricom.co.ke https://cybqa.pesapal.com https://pay.pesapal.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none';"
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    Cross-Origin-Resource-Policy = "same-site"
+
+# ── Function CORS headers ──
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin  = "https://grailmessagekenya.netlify.app"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Max-Age       = "86400"
+
+# ══════════════════════════════════════════════════════════════════════
+# REDIRECTS
+# ══════════════════════════════════════════════════════════════════════
+
+# API functions
+[[redirects]]
+  from   = "/api/*"
+  to     = "/.netlify/functions/:splat"
+  status = 200
+
+# Login page
+[[redirects]]
+  from   = "/login"
+  to     = "/login/index.html"
+  status = 200
+
+# Welcome page
+[[redirects]]
+  from   = "/welcome"
+  to     = "/welcome/index.html"
+  status = 200
+
+# Admin page
+[[redirects]]
+  from   = "/admin"
+  to     = "/admin/index.html"
+  status = 200
+
+# Block sensitive files
+[[redirects]]
+  from   = "/.env"
+  to     = "/login/index.html"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/netlify/functions/*"
+  to     = "/login/index.html"
+  status = 404
+  force  = true
+
+# Force HTTPS
+[[redirects]]
+  from   = "http://grailmessagekenya.netlify.app/*"
+  to     = "https://grailmessagekenya.netlify.app/:splat"
+  status = 301
+  force  = true
+
+
+# ── Proxy Supabase SDK from own domain (bypasses Brave shields) ──
+[[redirects]]
+  from   = "/supabase-sdk.js"
+  to     = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"
+  status = 200
+  force  = true
+
+# SPA fallback
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
