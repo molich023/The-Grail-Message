@@ -156,7 +156,7 @@ if (!window.supabase) {
   alert('Could not load authentication library. Please try Chrome browser or disable ad blocker.');
 }
 
-if (SUPA_KEY === 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l') {
+if (!SUPA_KEY || SUPA_KEY === 'YOUR_ANON_KEY_HERE') {
   document.querySelector('.body').innerHTML =
     '<div style="padding:20px;text-align:center;color:#721c24;background:#f8d7da;border-radius:8px;">' +
     '<strong>Setup Required</strong><br/><br/>' +
