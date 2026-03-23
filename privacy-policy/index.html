@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#1a6aad; --dark:#0d2a42; --muted:#3a6a90; --light:#e8f4fd; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(135deg,#87ceeb 0%,#d4eefd 100%);
+      min-height: 100vh;
+      font-family: 'EB Garamond', serif;
+      color: var(--dark); font-size: 17px; line-height: 1.9;
+    }
+    /* Nav */
+    .topnav {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid rgba(26,106,173,0.15);
+      padding: .9rem 2rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif; font-size: .9rem;
+      font-weight: 700; color: var(--blue);
+      text-decoration: none;
+    }
+    .back-btn {
+      font-family: 'Cinzel', serif; font-size: .72rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--dark);
+      background: rgba(255,255,255,0.8);
+      border: 1.5px solid rgba(26,106,173,0.25);
+      padding: .4rem 1rem; border-radius: 4px;
+      text-decoration: none; transition: all .2s;
+    }
+    .back-btn:hover { background: var(--light); }
+
+    /* Content */
+    .wrapper {
+      max-width: 800px; margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+    .page-header {
+      background: rgba(255,255,255,0.92);
+      border: 2px solid rgba(26,106,173,0.15);
+      border-radius: 12px; padding: 2.5rem;
+      margin-bottom: 2rem; text-align: center;
+      box-shadow: 0 4px 20px rgba(26,106,173,0.08);
+    }
+    .page-symbol { font-size: 2rem; margin-bottom: .8rem; }
+    .page-title {
+      font-family: 'Cinzel', serif; font-size: 1.4rem;
+      font-weight: 700; color: var(--dark);
+      letter-spacing: 1px; margin-bottom: .5rem;
+    }
+    .page-sub { font-size: .9rem; color: var(--muted); }
+    .last-updated {
+      font-size: .8rem; color: var(--muted);
+      margin-top: .5rem; font-style: italic;
+    }
+
+    /* Sections */
+    .section {
+      background: rgba(255,255,255,0.92);
+      border: 1.5px solid rgba(26,106,173,0.12);
+      border-radius: 10px; padding: 2rem 2.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px rgba(26,106,173,0.06);
+    }
+    .section-num {
+      font-family: 'Cinzel', serif; font-size: .7rem;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: .3rem;
+    }
+    .section-title {
+      font-family: 'Cinzel', serif; font-size: 1.05rem;
+      font-weight: 700; color: var(--dark);
+      margin-bottom: 1rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid rgba(26,106,173,0.12);
+    }
+    .section p { margin-bottom: 1rem; color: var(--dark); }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* Data table */
+    .data-table {
+      width: 100%; border-collapse: collapse;
+      margin: 1rem 0; font-size: .92rem;
+    }
+    .data-table th {
+      font-family: 'Cinzel', serif; font-size: .7rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); padding: .7rem 1rem;
+      border-bottom: 2px solid rgba(26,106,173,0.15);
+      text-align: left; background: rgba(26,106,173,0.03);
+    }
+    .data-table td {
+      padding: .7rem 1rem;
+      border-bottom: 1px solid rgba(26,106,173,0.08);
+      color: var(--dark);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* Highlight box */
+    .highlight {
+      background: var(--light);
+      border-left: 4px solid var(--blue);
+      border-radius: 4px; padding: 1rem 1.5rem;
+      margin: 1rem 0; font-size: .92rem;
+    }
+    .highlight strong { color: var(--dark); }
+
+    /* Contact card */
+    .contact-card {
+      background: linear-gradient(135deg,#0d2a42,#1a6aad);
+      border-radius: 10px; padding: 2rem;
+      text-align: center; color: #fff;
+      margin-top: 2rem;
+    }
+    .contact-card h3 {
+      font-family: 'Cinzel', serif; font-size: 1rem;
+      letter-spacing: 1px; margin-bottom: 1rem;
+    }
+    .contact-card p { font-size: .92rem; opacity: .9; margin-bottom: .4rem; }
+    .contact-card a { color: #87ceeb; text-decoration: none; }
+
+    /* Quote */
+    .closing-quote {
+      text-align: center; font-style: italic;
+      color: var(--muted); font-size: .95rem;
+      margin-top: 2rem; padding: 1.5rem;
+      border-top: 1px solid rgba(26,106,173,0.15);
+    }
+
+    @media(max-width:600px) {
+      .wrapper { padding: 1.5rem 1rem 4rem; }
+      .section { padding: 1.5rem; }
+      .data-table { font-size: .82rem; }
+      .data-table th, .data-table td { padding: .5rem .6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="topnav">
+  <a href="/" class="nav-logo">✦ Grail Message Kenya</a>
+  <a href="/" class="back-btn">← Back to Site</a>
+</nav>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-symbol">🔒</div>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="page-sub">
+      Alexander Bernhardt Publishing Company Kenya
+    </p>
+    <p class="last-updated">Last updated: March 2026</p>
+  </div>
+
+  <!-- 1. Introduction -->
+  <div class="section">
+    <p class="section-num">Section 1</p>
+    <h2 class="section-title">Introduction</h2>
+    <p>
+      Alexander Bernhardt Publishing Company Kenya
+      ("we", "our", "us") operates the website
+      <strong>grailmessagekenya.netlify.app</strong>
+      (the "Site"). We are the authorised distributor of the
+      works of Abd-ru-shin in Kenya and East Africa.
+    </p>
+    <p>
+      This Privacy Policy explains how we collect, use, store
+      and protect your personal information when you visit our
+      Site, create an account, purchase books or audio content,
+      or contact us.
+    </p>
+    <p>
+      By using our Site you agree to the collection and use of
+      information in accordance with this policy. We are
+      committed to protecting your privacy and handling your
+      data with care, transparency and respect.
+    </p>
+  </div>
+
+  <!-- 2. Information We Collect -->
+  <div class="section">
+    <p class="section-num">Section 2</p>
+    <h2 class="section-title">Information We Collect</h2>
+    <p>We collect the following types of information:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>What We Collect</th>
+          <th>When</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Account Info</strong></td>
+          <td>First name, last name, email, password</td>
+          <td>When you create an account</td>
+        </tr>
+        <tr>
+          <td><strong>Contact Info</strong></td>
+          <td>Phone number, city, country</td>
+          <td>When you sign up or place an order</td>
+        </tr>
+        <tr>
+          <td><strong>Order Info</strong></td>
+          <td>Books purchased, delivery address, payment method</td>
+          <td>When you place an order</td>
+        </tr>
+        <tr>
+          <td><strong>Payment Info</strong></td>
+          <td>M-Pesa transaction reference, payment status</td>
+          <td>When you make a payment</td>
+        </tr>
+        <tr>
+          <td><strong>Download Info</strong></td>
+          <td>Which PDF or audio content you accessed</td>
+          <td>When you download content</td>
+        </tr>
+        <tr>
+          <td><strong>Messages</strong></td>
+          <td>Subject and content of enquiries sent to us</td>
+          <td>When you contact us</td>
+        </tr>
+        <tr>
+          <td><strong>Usage Data</strong></td>
+          <td>Pages visited, time on site (anonymised)</td>
+          <td>Automatically via Simple Analytics</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">
+      <strong>What we do NOT collect:</strong>
+      We do not collect raw card numbers, CVV codes or
+      full bank account details. Card payments are processed
+      directly by Pesapal who are PCI-DSS compliant.
+      We never see your full card number.
+    </div>
+  </div>
+
+  <!-- 3. How We Use Your Information -->
+  <div class="section">
+    <p class="section-num">Section 3</p>
+    <h2 class="section-title">How We Use Your Information</h2>
+    <p>We use your information for the following purposes:</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Purpose</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Account management</strong></td>
+          <td>To create and manage your account and verify your email</td>
+        </tr>
+        <tr>
+          <td><strong>Order processing</strong></td>
+          <td>To process your book orders and arrange delivery</td>
+        </tr>
+        <tr>
+          <td><strong>Payment processing</strong></td>
+          <td>To process M-Pesa and card payments securely</td>
+        </tr>
+        <tr>
+          <td><strong>Communication</strong></td>
+          <td>To send order confirmations, receipts and updates</td>
+        </tr>
+        <tr>
+          <td><strong>Content delivery</strong></td>
+          <td>To give you access to PDF downloads and audio chapters you purchased</td>
+        </tr>
+        <tr>
+          <td><strong>Customer support</strong></td>
+          <td>To respond to your enquiries and resolve issues</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics</strong></td>
+          <td>To understand how visitors use our site and improve it</td>
+        </tr>
+        <tr>
+          <td><strong>Security</strong></td>
+          <td>To detect fraud, abuse and protect user accounts</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="highlight">
+      We do <strong>not</strong> sell, rent or share your personal
+      information with third parties for marketing purposes.
+      Your details are used solely for the purposes listed above.
+    </div>
+  </div>
+
+  <!-- 4. Data Storage and Security -->
+  <div class="section">
+    <p class="section-num">Section 4</p>
+    <h2 class="section-title">Data Storage and Security</h2>
+    <p>
+      Your data is stored securely using
+      <strong>Supabase</strong> — a PostgreSQL database
+      hosted on AWS infrastructure with encryption at rest
+      and in transit. All connections use SSL/TLS encryption.
+    </p>
+    <p>
+      Our website is hosted on <strong>Netlify</strong> with
+      HTTPS enforced, security headers, and DDoS protection.
+      Access to your data is protected by Row Level Security
+      policies — no other user can access your personal data.
+    </p>
+    <p>
+      Your passwords are never stored in plain text. They are
+      hashed and encrypted by Supabase Auth before storage.
+      Even we cannot see your password.
+    </p>
+    <div class="highlight">
+      <strong>Security measures in place:</strong>
+      SSL encryption · Password hashing · Row Level Security ·
+      Rate limiting · Bot protection · Input sanitization ·
+      Security headers (CSP, HSTS, X-Frame-Options)
+    </div>
+  </div>
+
+  <!-- 5. Third Party Services -->
+  <div class="section">
+    <p class="section-num">Section 5</p>
+    <h2 class="section-title">Third Party Services</h2>
+    <p>
+      We use the following third party services to operate
+      our Site. Each has their own privacy policy:
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Purpose</th>
+          <th>Data Shared</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td>Database and authentication</td>
+          <td>Account and order data</td>
+        </tr>
+        <tr>
+          <td><strong>Netlify</strong></td>
+          <td>Website hosting</td>
+          <td>IP address, page requests</td>
+        </tr>
+        <tr>
+          <td><strong>Safaricom M-Pesa</strong></td>
+          <td>Mobile money payments</td>
+          <td>Phone number, amount</td>
+        </tr>
+        <tr>
+          <td><strong>Pesapal</strong></td>
+          <td>Card payment processing</td>
+          <td>Name, email, amount</td>
+        </tr>
+        <tr>
+          <td><strong>Simple Analytics</strong></td>
+          <td>Privacy-friendly site analytics</td>
+          <td>Anonymous page visits only</td>
+        </tr>
+        <tr>
+          <td><strong>Google Fonts</strong></td>
+          <td>Website typography</td>
+          <td>IP address (font requests)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 6. Cookies -->
+  <div class="section">
+    <p class="section-num">Section 6</p>
+    <h2 class="section-title">Cookies and Sessions</h2>
+    <p>
+      We use cookies and local storage solely to keep you
+      logged in to your account. We do not use advertising
+      cookies, tracking cookies or any cookies from third
+      party advertising networks.
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Cookie</th>
+          <th>Purpose</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>sb-auth-token</strong></td>
+          <td>Keeps you logged in to your account</td>
+          <td>Until you sign out</td>
+        </tr>
+        <tr>
+          <td><strong>Session data</strong></td>
+          <td>Remembers your cart and preferences</td>
+          <td>Browser session</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      You can clear cookies at any time through your browser
+      settings. This will log you out of your account.
+    </p>
+  </div>
+
+  <!-- 7. Your Rights -->
+  <div class="section">
+    <p class="section-num">Section 7</p>
+    <h2 class="section-title">Your Rights</h2>
+    <p>You have the following rights regarding your personal data:</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Right</th>
+          <th>What It Means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Access</strong></td>
+          <td>Request a copy of all data we hold about you</td>
+        </tr>
+        <tr>
+          <td><strong>Correction</strong></td>
+          <td>Request correction of inaccurate personal data</td>
+        </tr>
+        <tr>
+          <td><strong>Deletion</strong></td>
+          <td>Request deletion of your account and personal data</td>
+        </tr>
+        <tr>
+          <td><strong>Portability</strong></td>
+          <td>Receive your data in a machine-readable format</td>
+        </tr>
+        <tr>
+          <td><strong>Objection</strong></td>
+          <td>Object to processing of your data for certain purposes</td>
+        </tr>
+        <tr>
+          <td><strong>Withdraw consent</strong></td>
+          <td>Withdraw consent for data processing at any time</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      To exercise any of these rights please contact us at
+      <strong>molich60@gmail.com</strong> or call
+      <strong>+254 704-658022</strong>. We will respond
+      within 30 days.
+    </p>
+  </div>
+
+  <!-- 8. Children's Privacy -->
+  <div class="section">
+    <p class="section-num">Section 8</p>
+    <h2 class="section-title">Children's Privacy</h2>
+    <p>
+      Our Site is not directed at children under the age of 13.
+      We do not knowingly collect personal information from
+      children under 13. If you are a parent or guardian and
+      believe your child has provided us with personal
+      information please contact us and we will delete it.
+    </p>
+  </div>
+
+  <!-- 9. Data Retention -->
+  <div class="section">
+    <p class="section-num">Section 9</p>
+    <h2 class="section-title">Data Retention</h2>
+    <p>
+      We retain your personal data for as long as your account
+      is active or as needed to provide our services.
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data Type</th>
+          <th>Retention Period</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Account data</strong></td>
+          <td>Until account deletion is requested</td>
+        </tr>
+        <tr>
+          <td><strong>Order records</strong></td>
+          <td>7 years (legal and tax requirements)</td>
+        </tr>
+        <tr>
+          <td><strong>Payment records</strong></td>
+          <td>7 years (financial regulations)</td>
+        </tr>
+        <tr>
+          <td><strong>Contact messages</strong></td>
+          <td>2 years after resolution</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics data</strong></td>
+          <td>Anonymised — retained indefinitely</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 10. Changes to Policy -->
+  <div class="section">
+    <p class="section-num">Section 10</p>
+    <h2 class="section-title">Changes to This Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time.
+      We will notify you of any significant changes by posting
+      the new policy on this page with an updated date.
+      We encourage you to review this policy periodically.
+    </p>
+    <p>
+      Your continued use of the Site after any changes
+      constitutes your acceptance of the updated policy.
+    </p>
+  </div>
+
+  <!-- Contact -->
+  <div class="contact-card">
+    <h3>✦ CONTACT US</h3>
+    <p><strong>Alexander Bernhardt Publishing Company Kenya</strong></p>
+    <p>P.O. Box 237-00208, Ngong Hills, Kenya</p>
+    <p>📧 <a href="mailto:molich60@gmail.com">molich60@gmail.com</a></p>
+    <p>📞 <a href="tel:+254704658022">+254 704-658022</a></p>
+    <p>🌐 <a href="https://grailmessagekenya.netlify.app">grailmessagekenya.netlify.app</a></p>
+  </div>
+
+  <div class="closing-quote">
+    "In the Light of Truth all things become clear."<br/>
+    <em>— Abd-ru-shin</em>
+  </div>
+
+</div>
+</body>
+</html>
