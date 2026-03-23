@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#1a6aad; --dark:#0d2a42; --muted:#3a6a90; --light:#e8f4fd; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      min-height:100vh;
+      background:linear-gradient(135deg,#87ceeb 0%,#d4eefd 100%);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'EB Garamond',serif;padding:20px;
+    }
+    .card{
+      background:rgba(255,255,255,0.95);
+      border:2px solid rgba(26,106,173,0.2);
+      border-radius:14px;width:100%;max-width:440px;
+      overflow:hidden;
+      box-shadow:0 20px 60px rgba(26,106,173,0.15);
+    }
+    .hdr{background:linear-gradient(135deg,#0d2a42,#1a6aad);padding:35px 30px;text-align:center;}
+    .sym{font-size:2.2rem;color:#fff;margin-bottom:8px;}
+    .ttl{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:#fff;letter-spacing:2px;text-transform:uppercase;}
+    .sub{font-size:.8rem;color:rgba(255,255,255,0.75);margin-top:5px;}
+    .tabs{display:flex;border-bottom:2px solid rgba(26,106,173,0.1);}
+    .tab{flex:1;padding:14px;text-align:center;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;transition:all .2s;}
+    .tab.on{color:var(--blue);border-bottom-color:var(--blue);background:rgba(26,106,173,0.04);}
+    .body{padding:30px;}
+    .pnl{display:none;} .pnl.on{display:block;}
+    .lbl{display:block;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .inp{width:100%;padding:.8rem 1rem;margin-bottom:14px;border:1.5px solid rgba(26,106,173,0.2);border-radius:6px;font-size:.95rem;font-family:'EB Garamond',serif;background:rgba(255,255,255,0.9);color:var(--dark);outline:none;transition:border-color .3s;}
+    .inp:focus{border-color:var(--blue);}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .btn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;border:none;border-radius:6px;font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.12em;cursor:pointer;transition:opacity .3s;}
+    .btn:hover{opacity:.88;} .btn:disabled{opacity:.55;cursor:not-allowed;}
+    .msg{padding:.75rem 1rem;border-radius:6px;font-size:.85rem;margin-bottom:14px;display:none;line-height:1.6;}
+    .err{background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;}
+    .ok{background:#d1e7dd;border:1px solid #badbcc;color:#0a3622;}
+    .hr{border:none;border-top:1px solid rgba(26,106,173,0.1);margin:18px 0;}
+    .hint{font-size:.8rem;color:var(--muted);text-align:center;line-height:1.8;}
+    .hint a{color:var(--blue);cursor:pointer;text-decoration:none;}
+    .quote{font-style:italic;font-size:.85rem;color:var(--muted);text-align:center;padding:16px 20px;background:var(--light);border-top:1px solid rgba(26,106,173,0.1);}
+    .loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.8);align-items:center;justify-content:center;z-index:999;}
+    .spinner{width:40px;height:40px;border:4px solid rgba(26,106,173,0.2);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    @media(max-width:480px){.row2{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<div class="card">
+  <div class="hdr">
+    <div class="sym">✦</div>
+    <p class="ttl">Grail Message Kenya</p>
+    <p class="sub">Alexander Bernhardt Publishing Company Kenya</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" id="tLogin" onclick="goTab('login')">Sign In</button>
+    <button class="tab" id="tSignup" onclick="goTab('signup')">Create Account</button>
+  </div>
+
+  <div class="body">
+
+    <!-- SIGN IN -->
+    <div class="pnl on" id="pLogin">
+      <div class="msg err" id="eL"></div>
+      <div class="msg ok"  id="sL"></div>
+      <label class="lbl">Email Address</label>
+      <input type="email" id="lEmail" class="inp" placeholder="your@email.com" autocomplete="email"/>
+      <label class="lbl">Password</label>
+      <input type="password" id="lPass" class="inp" placeholder="Your password"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="btn" id="bLogin" onclick="doLogin()">🔐 Sign In</button>
+      <hr class="hr"/>
+      <p class="hint">
+        <a onclick="goTab('forgot')">Forgot password?</a>
+        &nbsp;|&nbsp;
+        No account? <a onclick="goTab('signup')">Create one</a>
+      </p>
+    </div>
+
+    <!-- CREATE ACCOUNT -->
+    <div class="pnl" id="pSignup">
+      <div class="msg err" id="eS"></div>
+      <div class="msg ok"  id="sS"></div>
+      <div class="row2">
+        <div>
+          <label class="lbl">First Name *</label>
+          <input type="text" id="sFirst" class="inp" placeholder="First name"/>
+        </div>
+        <div>
+          <label class="lbl">Last Name *</label>
+          <input type="text" id="sLast" class="inp" placeholder="Last name"/>
+        </div>
+      </div>
+      <label class="lbl">Email Address *</label>
+      <input type="email" id="sEmail" class="inp" placeholder="your@email.com"/>
+      <label class="lbl">Phone Number *</label>
+      <input type="tel" id="sPhone" class="inp" placeholder="07XX XXX XXX"/>
+      <label class="lbl">City *</label>
+      <input type="text" id="sCity" class="inp" placeholder="Your city or town"/>
+      <label class="lbl">Password * (min 8 characters)</label>
+      <input type="password" id="sPass" class="inp" placeholder="Minimum 8 characters"/>
+      <button class="btn" id="bSignup" onclick="doSignup()">✦ Create My Account</button>
+      <hr class="hr"/>
+      <p class="hint">Already have an account? <a onclick="goTab('login')">Sign in here</a></p>
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div class="pnl" id="pForgot">
+      <div class="msg err" id="eF"></div>
+      <div class="msg ok"  id="sF"></div>
+      <p style="font-size:.9rem;color:var(--muted);margin-bottom:18px;line-height:1.7;">
+        Enter your email and we will send you a password reset link.
+      </p>
+      <label class="lbl">Email Address</label>
+      <input type="email" id="fEmail" class="inp" placeholder="your@email.com"
+        onkeydown="if(event.key==='Enter')doForgot()"/>
+      <button class="btn" id="bForgot" onclick="doForgot()">📧 Send Reset Link</button>
+      <hr class="hr"/>
+      <p class="hint"><a onclick="goTab('login')">← Back to Sign In</a></p>
+    </div>
+
+  </div>
+
+  <div class="quote">
+    "Seek the Truth and the Truth will set you free."<br/>
+    <em>— Abd-ru-shin</em>
+  </div>
+</div>
+
+<!-- Load Supabase SDK SYNCHRONOUSLY before any other scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STEP 1 ★ Replace YOUR_ANON_KEY_HERE with your actual key
+// Get it: Supabase dashboard → Settings → API → anon public
+// ═══════════════════════════════════════════════════════════
+var SUPA_URL = 'https://ecxdrwomkxcuxlhqdtum.supabase.co';
+var SUPA_KEY = 'YOUR_ANON_KEY_HERE'; // ← ★ EDIT THIS LINE
+// ═══════════════════════════════════════════════════════════
+
+// ── Safety checks ─────────────────────────────────────────
+if (!window.supabase) {
+  alert('Could not load authentication library. Please try Chrome browser or disable ad blocker.');
+}
+
+if (SUPA_KEY === 'YOUR_ANON_KEY_HERE') {
+  document.querySelector('.body').innerHTML =
+    '<div style="padding:20px;text-align:center;color:#721c24;background:#f8d7da;border-radius:8px;">' +
+    '<strong>Setup Required</strong><br/><br/>' +
+    'Please add your Supabase anon key to this file.<br/>' +
+    'It is on line 3 of the script section.' +
+    '</div>';
+}
+
+// ── Create client ─────────────────────────────────────────
+var _sb = null;
+try {
+  _sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+} catch(e) {
+  alert('Supabase setup error: ' + e.message);
+}
+
+// ── Check existing session ────────────────────────────────
+if (_sb) {
+  _sb.auth.getSession().then(function(res) {
+    if (res.data && res.data.session) {
+      window.location.replace('/');
+    }
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function goTab(t) {
+  document.getElementById('pLogin').classList.toggle('on', t==='login');
+  document.getElementById('pSignup').classList.toggle('on', t==='signup');
+  document.getElementById('pForgot').classList.toggle('on', t==='forgot');
+  document.getElementById('tLogin').classList.toggle('on', t==='login');
+  document.getElementById('tSignup').classList.toggle('on', t==='signup');
+}
+
+function showMsg(id, txt, type) {
+  var el = document.getElementById(id);
+  el.textContent = txt;
+  el.className = 'msg ' + type;
+  el.style.display = 'block';
+}
+
+function hideMsg(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function setBtn(id, txt, on) {
+  var b = document.getElementById(id);
+  b.textContent = txt;
+  b.disabled = !on;
+}
+
+function showLoading() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+function friendlyErr(msg) {
+  if (!msg) return 'Something went wrong. Please try again.';
+  if (msg.indexOf('Invalid login') > -1 || msg.indexOf('invalid_credentials') > -1)
+    return 'Incorrect email or password. Please try again.';
+  if (msg.indexOf('not confirmed') > -1 || msg.indexOf('email_not_confirmed') > -1)
+    return 'Please verify your email first. Check your inbox for a verification link.';
+  if (msg.indexOf('Too many') > -1)
+    return 'Too many attempts. Please wait a few minutes and try again.';
+  if (msg.indexOf('already') > -1)
+    return 'This email is already registered. Please sign in instead.';
+  if (msg.indexOf('Password') > -1 || msg.indexOf('password') > -1)
+    return 'Password is too weak. Please choose a stronger one (mix of letters, numbers, symbols).';
+  return msg;
+}
+
+// ── LOGIN ─────────────────────────────────────────────────
+function doLogin() {
+  if (!_sb) { alert('Not connected. Please refresh the page.'); return; }
+
+  var email = (document.getElementById('lEmail').value||'').trim();
+  var pass  = document.getElementById('lPass').value||'';
+
+  hideMsg('eL'); hideMsg('sL');
+
+  if (!email || !pass) {
+    showMsg('eL','Please enter your email and password.','err');
+    return;
+  }
+
+  setBtn('bLogin','Signing in...',false);
+  showLoading();
+
+  _sb.auth.signInWithPassword({email:email, password:pass})
+  .then(function(res) {
+    hideLoading();
+    setBtn('bLogin','🔐 Sign In',true);
+    if (res.error) {
+      showMsg('eL', friendlyErr(res.error.message), 'err');
+      return;
+    }
+    showMsg('sL','✅ Welcome back! Taking you in...','ok');
+    setTimeout(function(){ window.location.replace('/'); }, 1000);
+  })
+  .catch(function(err) {
+    hideLoading();
+    setBtn('bLogin','🔐 Sign In',true);
+    showMsg('eL', friendlyErr(err.message), 'err');
+  });
+}
+
+// ── SIGN UP ───────────────────────────────────────────────
+function doSignup() {
+  if (!_sb) { alert('Not connected. Please refresh the page.'); return; }
+
+  var first = (document.getElementById('sFirst').value||'').trim();
+  var last  = (document.getElementById('sLast').value||'').trim();
+  var email = (document.getElementById('sEmail').value||'').trim();
+  var phone = (document.getElementById('sPhone').value||'').trim();
+  var city  = (document.getElementById('sCity').value||'').trim();
+  var pass  = document.getElementById('sPass').value||'';
+
+  hideMsg('eS'); hideMsg('sS');
+
+  if (!first||!last||!email||!phone||!city||!pass) {
+    showMsg('eS','Please fill in all required fields.','err');
+    return;
+  }
+  if (pass.length < 8) {
+    showMsg('eS','Password must be at least 8 characters.','err');
+    return;
+  }
+
+  setBtn('bSignup','Creating account...',false);
+  showLoading();
+
+  _sb.auth.signUp({
+    email: email,
+    password: pass,
+    options: {
+      data: {first_name:first, last_name:last, phone:phone, city:city},
+      emailRedirectTo: 'https://grailmessagekenya.netlify.app/welcome/'
+    }
+  })
+  .then(function(res) {
+    hideLoading();
+    setBtn('bSignup','✦ Create My Account',true);
+    if (res.error) {
+      showMsg('eS', friendlyErr(res.error.message), 'err');
+      return;
+    }
+    // Save to subscribers table
+    _sb.from('subscribers').insert([{
+      first_name:first, last_name:last,
+      email:email, phone:phone, city:city, country:'Kenya'
+    }]).then(function(){}).catch(function(){});
+
+    showMsg('sS',
+      '✅ Account created! A verification email has been sent to '+email+
+      '. Please check your inbox and click the link to activate your account.',
+      'ok'
+    );
+  })
+  .catch(function(err) {
+    hideLoading();
+    setBtn('bSignup','✦ Create My Account',true);
+    showMsg('eS', friendlyErr(err.message), 'err');
+  });
+}
+
+// ── FORGOT PASSWORD ───────────────────────────────────────
+function doForgot() {
+  if (!_sb) { alert('Not connected. Please refresh the page.'); return; }
+
+  var email = (document.getElementById('fEmail').value||'').trim();
+  hideMsg('eF'); hideMsg('sF');
+
+  if (!email) {
+    showMsg('eF','Please enter your email address.','err');
+    return;
+  }
+
+  setBtn('bForgot','Sending...',false);
+  showLoading();
+
+  _sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://grailmessagekenya.netlify.app/reset-password/'
+  })
+  .then(function() {
+    hideLoading();
+    setBtn('bForgot','📧 Send Reset Link',true);
+    showMsg('sF',
+      '✅ If an account exists for '+email+
+      ', a reset link has been sent. Please check your inbox and spam folder.',
+      'ok'
+    );
+    document.getElementById('fEmail').value = '';
+  })
+  .catch(function(err) {
+    hideLoading();
+    setBtn('bForgot','📧 Send Reset Link',true);
+    showMsg('eF', friendlyErr(err.message), 'err');
+  });
+}
+</script>
+</body>
+</html>
