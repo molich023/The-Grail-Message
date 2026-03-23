@@ -5,8 +5,8 @@ Authorised Distributor of the works of Abd-ru-shin in Kenya and East Africa
 
 🌐 **Live Site:** https://grailmessagekenya.netlify.app
 📦 **Repository:** https://github.com/molich023/The-Grail-Message
-📧 **Contact:** molich60@gmail.com | Randy.voti@owasp.org
-📞 **Phone:** +254 704-658022
+📧 **Contact:** info@grailmessagekenya.co.ke
+📞 **Phone:** +254 736 340 024
 📮 **Address:** P.O. Box 237-00208, Ngong Hills, Kenya
 
 ---
