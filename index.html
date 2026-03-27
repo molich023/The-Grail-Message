@@ -415,96 +415,67 @@
 </head>
 <body>
 
-  <!-- SUPABASE AUTH GATE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script>
-// ═══════════════════════════════════════════════════════
-// AUTH GATE — hides page until login verified
-// ═══════════════════════════════════════════════════════
-var _SUPA_URL = 'https://ecxdrwomkxcuxlhqdtum.supabase.co';
-var _SUPA_KEY = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l';
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-app@2/+esm';
 
-// Hide page immediately
-document.documentElement.style.visibility = 'hidden';
+    const SB_URL = "https://ecxdrwomkxcuxlhqdtum.supabase.co"; // Ensure this matches your project
+    const SB_KEY = "sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l"; 
 
-function runAuthGate() {
-  if (!window.supabase) {
-    document.documentElement.style.visibility = 'visible';
-    return;
-  }
+    (async () => {
+      const sb = createClient(SB_URL, SB_KEY);
 
-  var _sbMain = window.supabase.createClient(_SUPA_URL, _SUPA_KEY);
+      // 1. Get current session
+      const { data: { session } } = await sb.auth.getSession();
 
-  _sbMain.auth.getSession().then(function(res) {
-    if (!res.data || !res.data.session) {
-      window.location.replace('/login/');
-      return;
-    }
-
-    // Show page — user is logged in
-    document.documentElement.style.visibility = 'visible';
-
-    var session   = res.data.session;
-    var user      = session.user;
-    var meta      = user.user_metadata || {};
-    var firstName = meta.first_name || user.email.split('@')[0];
-    var lastName  = meta.last_name  || '';
-
-    // Update nav — wait for DOM to be fully ready
-    function updateNav() {
-      var ud = document.getElementById('userDisplay');
-      var lb = document.getElementById('logoutBtn');
-
-      if (ud) {
-        ud.textContent   = '👤 ' + firstName;
-        ud.style.display = 'inline-block';
+      // 2. Redirect if NO session found
+      if (!session) {
+        window.location.replace('/login/');
+        return;
       }
 
-      if (lb) {
-        lb.style.display = 'inline-block';
-        lb.onclick = function() {
-          this.textContent = '⏳ Signing out...';
-          this.disabled    = true;
-          _sbMain.auth.signOut().then(function() {
-            window.location.replace('/login/');
-          });
+      // 3. User is logged in - Setup UI
+      const user = session.user;
+      const meta = user.user_metadata || {};
+      const firstName = meta.first_name || user.email.split('@')[0];
+
+      // Update Nav Username
+      const userDisplay = document.getElementById('userDisplay');
+      if (userDisplay) {
+        userDisplay.textContent = '👤 ' + firstName;
+        userDisplay.style.display = 'inline-block';
+      }
+
+      // Update Logout Button
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.style.display = 'inline-block';
+        logoutBtn.onclick = async () => {
+          logoutBtn.textContent = 'Signing out...';
+          await sb.auth.signOut();
+          window.location.replace('/login/');
         };
       }
-    }
 
-    // Run after DOM is fully loaded
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', updateNav);
-    } else {
-      updateNav();
-    }
-
-    // Store globally for other scripts
-    window._sb    = _sbMain;
-    window._sbMain = _sbMain;
-    window._user  = user;
-
-    // Listen for sign out
-    _sbMain.auth.onAuthStateChange(function(event, session) {
-      if (event === 'SIGNED_OUT' || !session) {
-        window.location.replace('/login/');
+      // Update Hero Greeting (if it exists on index)
+      const heroGreeting = document.getElementById('heroGreeting');
+      if (heroGreeting) {
+        heroGreeting.textContent = 'Welcome, ' + firstName;
       }
-    });
 
-  }).catch(function(err) {
-    console.error('Auth gate error:', err);
-    window.location.replace('/login/');
-  });
-}
+      // 4. Global access for other scripts
+      window._sb = sb;
+      window._user = user;
 
-// Run immediately if DOM ready, else wait
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', runAuthGate);
-} else {
-  runAuthGate();
-}
-</script>
-<script>
+      // 5. Explicit Auth Listener
+      // We only redirect on the 'SIGNED_OUT' event to avoid race conditions during page loads
+      sb.auth.onAuthStateChange((event) => {
+        if (event === 'SIGNED_OUT') {
+          window.location.replace('/login/');
+        }
+      });
+    })();
+  </script>
+  
 // ═══════════════════════════════════════════════════
 // AUTH GATE — Requires login to view site
 // ★ Replace YOUR_ANON_KEY_HERE with your anon key
