@@ -442,35 +442,7 @@
 
     sb.auth.getSession().then(function (res) {
       var session = res.data && res.data.session;
-      if (session) {
-    const user = session.user;
-    const firstName = user.user_metadata?.first_name || user.email.split('@')[0];
-
-    // 1. Update the Username Display
-    const userDisplay = document.getElementById('userDisplay');
-    if (userDisplay) {
-        userDisplay.textContent = '👤 ' + firstName;
-        userDisplay.style.display = 'inline-block';
-    }
-
-    // 2. Setup and Show the Logout Button
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.style.display = 'inline-block';
-        logoutBtn.onclick = async () => {
-            logoutBtn.textContent = 'Signing out...';
-            await sb.auth.signOut();
-            window.location.replace('/login/');
-        };
-    }
-
-    // 3. Update Hero Greeting (Optional)
-    const heroGreeting = document.getElementById('heroGreeting');
-    if (heroGreeting) {
-        heroGreeting.textContent = 'Welcome, ' + firstName;
-    }
-}
-
+      
 
       if (!session) {
         window.location.replace('/login/');
@@ -522,7 +494,7 @@
           window.location.replace('/login/');
         }
       });
-
+      window._sb = sb;
     }).catch(function (err) {
       console.error('Auth gate error:', err);
       document.documentElement.style.visibility = 'visible';
