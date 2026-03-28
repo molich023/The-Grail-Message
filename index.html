@@ -1501,11 +1501,11 @@
 
   // ── Shipping Info Modal ─────────────────────────────────────
   function openShippingInfo() {
-    var existing = document.getElementById('shippingModal');
+    var existing = document.getElementById('shippingInfoModal');
     if (existing) existing.remove();
 
     var modal = document.createElement('div');
-    modal.id = 'shippingModal';
+    modal.id = 'shippingInfoModal';
     modal.className = 'modal-overlay';
     modal.innerHTML =
       '<div class="modal-box" style="max-width:500px;">' +
