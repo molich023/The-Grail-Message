@@ -419,158 +419,96 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════
-// AUTH GATE — hides page until login verified
+// AUTH GATE — Single clean version (replaces both duplicate blocks)
+// Paste this between the <script src="supabase..."> tag and </head>
 // ═══════════════════════════════════════════════════════
-var _SUPA_URL = 'https://ecxdrwomkxcuxlhqdtum.supabase.co';
-var _SUPA_KEY = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l';
+(function () {
+  var SUPA_URL = 'https://ecxdrwomkxcuxlhqdtum.supabase.co';
+  var SUPA_KEY = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l';
 
-// Hide page immediately
-document.documentElement.style.visibility = 'hidden';
+  // Hide page until auth check completes
+  document.documentElement.style.visibility = 'hidden';
 
-function runAuthGate() {
-  if (!window.supabase) {
-    document.documentElement.style.visibility = 'visible';
-    return;
+  function init() {
+    if (!window.supabase) {
+      // Supabase SDK not loaded — show page gracefully
+      document.documentElement.style.visibility = 'visible';
+      return;
+    }
+
+    var sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    window._sb = sb;
+    window._sbMain = sb;
+
+    sb.auth.getSession().then(function (res) {
+      var session = res.data && res.data.session;
+
+      if (!session) {
+        window.location.replace('/login/');
+        return;
+      }
+
+      // ── Logged in: show page ──────────────────────────
+      document.documentElement.style.visibility = 'visible';
+
+      var user      = session.user;
+      var meta      = user.user_metadata || {};
+      var firstName = meta.first_name || user.email.split('@')[0];
+
+      window._user = user;
+
+      // ── Update nav (works whether DOM is ready or not) ──
+      function updateNav() {
+        var ud = document.getElementById('userDisplay');
+        var lb = document.getElementById('logoutBtn');
+
+        if (ud) {
+          ud.textContent   = '👤 ' + firstName;
+          ud.style.display = 'inline-block';
+        }
+
+        if (lb) {
+          lb.style.display = 'inline-block';
+          lb.addEventListener('click', function () {
+            lb.textContent = '⏳ Signing out…';
+            lb.disabled    = true;
+            sb.auth.signOut().then(function () {
+              window.location.replace('/login/');
+            });
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateNav);
+      } else {
+        updateNav();
+      }
+
+      // ── Only redirect on explicit sign-out ───────────
+      // NOTE: We do NOT redirect on every auth state change,
+      // only when the user explicitly signs out.
+      sb.auth.onAuthStateChange(function (event) {
+        if (event === 'SIGNED_OUT') {
+          window.location.replace('/login/');
+        }
+      });
+
+    }).catch(function (err) {
+      console.error('Auth gate error:', err);
+      document.documentElement.style.visibility = 'visible';
+      window.location.replace('/login/');
+    });
   }
 
-  var _sbMain = window.supabase.createClient(_SUPA_URL, _SUPA_KEY);
-
-  _sbMain.auth.getSession().then(function(res) {
-    if (!res.data || !res.data.session) {
-      window.location.replace('/login/');
-      return;
-    }
-
-    // Show page — user is logged in
-    document.documentElement.style.visibility = 'visible';
-
-    var session   = res.data.session;
-    var user      = session.user;
-    var meta      = user.user_metadata || {};
-    var firstName = meta.first_name || user.email.split('@')[0];
-    var lastName  = meta.last_name  || '';
-
-    // Update nav — wait for DOM to be fully ready
-    function updateNav() {
-      var ud = document.getElementById('userDisplay');
-      var lb = document.getElementById('logoutBtn');
-
-      if (ud) {
-        ud.textContent   = '👤 ' + firstName;
-        ud.style.display = 'inline-block';
-      }
-
-      if (lb) {
-        lb.style.display = 'inline-block';
-        lb.onclick = function() {
-          this.textContent = '⏳ Signing out...';
-          this.disabled    = true;
-          _sbMain.auth.signOut().then(function() {
-            window.location.replace('/login/');
-          });
-        };
-      }
-    }
-
-    // Run after DOM is fully loaded
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', updateNav);
-    } else {
-      updateNav();
-    }
-
-    // Store globally for other scripts
-    window._sb    = _sbMain;
-    window._sbMain = _sbMain;
-    window._user  = user;
-
-    // Listen for sign out
-    _sbMain.auth.onAuthStateChange(function(event, session) {
-      if (event === 'SIGNED_OUT' || !session) {
-        window.location.replace('/login/');
-      }
-    });
-
-  }).catch(function(err) {
-    console.error('Auth gate error:', err);
-    window.location.replace('/login/');
-  });
-}
-
-// Run immediately if DOM ready, else wait
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', runAuthGate);
-} else {
-  runAuthGate();
-}
-</script>
-<script>
-// ═══════════════════════════════════════════════════
-// AUTH GATE — Requires login to view site
-// ★ Replace YOUR_ANON_KEY_HERE with your anon key
-// ═══════════════════════════════════════════════════
-var _SUPA_URL = 'https://ecxdrwomkxcuxlhqdtum.supabase.co';
-var _SUPA_KEY = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l'; // ← ★ your key
-
-// Hide page until auth check completes
-document.documentElement.style.visibility = 'hidden';
-
-if (!window.supabase) {
-  document.documentElement.style.visibility = 'visible';
-} else {
-  var _sbMain = window.supabase.createClient(_SUPA_URL, _SUPA_KEY);
-
-  _sbMain.auth.getSession().then(function(res) {
-    if (!res.data || !res.data.session) {
-      // Not logged in — redirect to login
-      window.location.replace('/login/');
-      return;
-    }
-
-    // Logged in — show page
-    document.documentElement.style.visibility = 'visible';
-
-    var user      = res.data.session.user;
-    var meta      = user.user_metadata || {};
-    var firstName = meta.first_name || user.email.split('@')[0];
-
-    // Show user name in nav
-    var ud = document.getElementById('userDisplay');
-    if (ud) {
-      ud.textContent  = '👤 ' + firstName;
-      ud.style.display = 'inline-block';
-    }
-
-    // Show logout button
-    var lb = document.getElementById('logoutBtn');
-    if (lb) {
-      lb.style.display = 'inline-block';
-      lb.onclick = function() {
-        lb.textContent = 'Signing out...';
-        _sbMain.auth.signOut().then(function() {
-          window.location.replace('/login/');
-        });
-      };
-    }
-
-    // Listen for auth changes
-    _sbMain.auth.onAuthStateChange(function(event, session) {
-      if (event === 'SIGNED_OUT' || !session) {
-        window.location.replace('/login/');
-      }
-    });
-
-    // Make available globally
-    window._sb   = _sbMain;
-    window._user = user;
-
-  }).catch(function() {
-    window.location.replace('/login/');
-  });
-}
-</script>
-
-<div id="stars"></div>
+  // Run after Supabase SDK is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+  
 
 <!-- SITE HEADER BANNER -->
 <div class="site-header-banner">
