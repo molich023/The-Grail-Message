@@ -427,6 +427,10 @@
   var SUPA_KEY = 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l';
 
   // Hide page until auth check completes
+  window.onload = function() {
+  updateNavbar();
+};
+    
   document.documentElement.style.visibility = 'hidden';
 
   function init() {
@@ -459,6 +463,7 @@
       window._user = user;
 
       // ── Update nav (works whether DOM is ready or not) ──
+      
       function updateNav() {
         var ud = document.getElementById('userDisplay');
         var lb = document.getElementById('logoutBtn');
@@ -509,6 +514,60 @@
     init();
   }
 })();
+  window.onload = function() {
+  updateNavbar();
+};
+  <script>
+  // 1. Navigation & Logout Logic
+  const userState = { isLoggedIn: true, username: "Guest" }; // Simulated login
+
+  function updateNavbar() {
+    const navLinks = document.querySelector('.nav-links'); 
+    if (navLinks && userState.isLoggedIn) {
+      navLinks.innerHTML = `
+        <li><a href="#home">Home</a></li>
+        <li><a href="#books">Books</a></li>
+        <li><a href="#about">About</a></li>
+        <li><span style="color:var(--gold-dark); margin: 0 15px; font-weight:bold;">${userState.username}</span></li>
+        <li><a href="#" id="logoutBtn" style="color:var(--gold-dark); cursor:pointer;">Logout</a></li>
+      `;
+      document.getElementById('logoutBtn').onclick = (e) => {
+        e.preventDefault();
+        alert("Logging out...");
+        location.reload(); 
+      };
+    }
+  }
+
+  // 2. Smooth Scrolling for all links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // 3. Make "Buy Now" buttons open your existing shipping function
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+      const text = e.target.innerText.toLowerCase();
+      if (text.includes('buy') || text.includes('order')) {
+        e.preventDefault();
+        if (typeof showShippingInfoModal === 'function') {
+          showShippingInfoModal();
+        }
+      }
+    }
+  });
+
+  // Initialize
+  window.onload = updateNavbar;
+</script>
+
+            
 </script>
   
 
@@ -1133,7 +1192,7 @@
         <li><a href="#books">Lectures in the Proximity</a></li>
       </ul></div>
       <div class="footer-col"><h4>Contact &amp; Orders</h4><ul>
-        <li><a href="tel:+254736340024">📞 0704-658022</a></li>
+        <li><a href="tel:+254736340024">📞 0736-340024</a></li>
         <li><a href="https://wa.me/254736340024">💬 WhatsApp Us</a></li>
         <li><a href="mailto:molich60@gmail.com">✉ Email Enquiries</a></li>
         <li><a href="#" onclick="openShippingInfo();return false;">Shipping Info</a></li>
@@ -1500,7 +1559,7 @@
     });
   }
 
-  // ── Shipping Info Modal ─────────────────────────────────────
+  // ── ShippingInfo Modal ─────────────────────────────────────
   function openShippingInfo() {
     var existing = document.getElementById('shippingInfoModal');
     if (existing) existing.remove();
