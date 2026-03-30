@@ -1545,49 +1545,55 @@
       showShippingModal();
     });
   });
-
- <script>
-  // 1. PERSISTENT AUTH LOGIC
-  // This replaces the variable that was "forgetting" your status on refresh
-  const Auth = {
+<script>
+  /**
+   * 1. PERSISTENT STATE MANAGEMENT
+   * Uses sessionStorage so the browser "remembers" you are logged in
+   * without having to reload the entire page.
+   */
+  const AppState = {
     isLoggedIn: () => sessionStorage.getItem('isLoggedIn') === 'true',
-    username: () => sessionStorage.getItem('username') || 'Member',
-    login: (name) => {
+    getUser: () => sessionStorage.getItem('username') || 'Member',
+    
+    // Call this when your login form succeeds
+    login: (username) => {
       sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('username', name);
-      updateUI();
+      sessionStorage.setItem('username', username);
+      updateView();
     },
+    
     logout: () => {
       sessionStorage.clear();
-      window.location.hash = '#login'; // Move back to login section
-      updateUI();
+      window.location.hash = '#login';
+      updateView();
     }
   };
 
-  // 2. UNIFIED UI UPDATE
-  // This centralizes all changes to prevent "page bouncing"
-  function updateUI() {
+  /**
+   * 2. DYNAMIC UI UPDATER
+   * This function updates the Navbar and sections WITHOUT bouncing.
+   */
+  function updateView() {
     const navLinks = document.querySelector('.nav-links');
     if (!navLinks) return;
 
-    // Use your specific gold color from the CSS variables
-    const goldColor = 'var(--gold-dark)';
-
-    if (Auth.isLoggedIn()) {
+    if (AppState.isLoggedIn()) {
+      // Logged In View
       navLinks.innerHTML = `
         <li><a href="#home">Home</a></li>
         <li><a href="#books">Books</a></li>
         <li><a href="#about">About</a></li>
-        <li><span style="color:${goldColor}; margin: 0 15px; font-weight:bold;">Welcome, ${Auth.username()}</span></li>
-        <li><a href="#" id="logoutBtn" style="color:${goldColor}; cursor:pointer;">Logout</a></li>
+        <li><span style="color:var(--gold-dark); margin: 0 15px; font-weight:bold;">Welcome, ${AppState.getUser()}</span></li>
+        <li><a href="#" id="logoutAction" style="color:var(--gold-dark); cursor:pointer;">Logout</a></li>
       `;
-
-      // Assign the logout function to the new button
-      document.getElementById('logoutBtn').onclick = (e) => {
+      
+      // Attach logout event
+      document.getElementById('logoutAction').onclick = (e) => {
         e.preventDefault();
-        Auth.logout();
+        AppState.logout();
       };
     } else {
+      // Public View
       navLinks.innerHTML = `
         <li><a href="#home">Home</a></li>
         <li><a href="#books">Books</a></li>
@@ -1597,35 +1603,35 @@
     }
   }
 
-  // 3. SMOOTH SCROLLING & NAVIGATION
-  // Replaces the jumping behavior with a smooth slide
+  /**
+   * 3. SMOOTH NAVIGATION & AUTO-CLOSE MODALS
+   */
   document.addEventListener('click', function(e) {
     const anchor = e.target.closest('a');
+    
+    // Handle Internal Links (#)
     if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
       const targetId = anchor.getAttribute('href');
       if (targetId === '#') return;
-      
+
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         e.preventDefault();
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  });
 
-  // 4. BUY BUTTON BINDING
-  // Connects your specific 'buy-btn' class to the shipping modal
-  document.querySelectorAll('.buy-btn, .mobile-buy-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    // Handle Buy Buttons
+    if (e.target.classList.contains('buy-btn') || e.target.classList.contains('mobile-buy-btn')) {
       e.preventDefault();
-      if (typeof showShippingModal === 'function') {
-        showShippingModal();
-      }
-    });
+      if (typeof showShippingModal === 'function') showShippingModal();
+    }
   });
 
-  // Run on page load
-  window.addEventListener('load', updateUI);
+  // Initialize on Load
+  window.addEventListener('DOMContentLoaded', updateView);
 </script>
+
 </body>
 </html>
+
