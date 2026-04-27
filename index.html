@@ -1551,6 +1551,45 @@ const supabaseUrl = 'YOUR_SUPABASE_URL';
 const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
 const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
 
+  // 1. Sign Up Function
+async function signUpUser(email, password) {
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  });
+  if (error) {
+    alert("Error: " + error.message);
+  } else {
+    alert("Check your email for the confirmation link!");
+  }
+  }
+
+  // 2. Request Password Reset
+async function requestPasswordReset(email) {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://grailmessagekenya.eu.org/reset-password', 
+  });
+  if (error) {
+    alert("Error: " + error.message);
+  } else {
+    alert("Password reset email sent!");
+  }
+  }
+
+  // 3. Listen for the recovery link click
+supabase.auth.onAuthStateChange(async (event, session) => {
+  if (event === "PASSWORD_RECOVERY") {
+    const newPassword = prompt("Please enter your new password:");
+    if (newPassword) {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) alert("Error updating password: " + error.message);
+      else alert("Password updated successfully!");
+    }
+  }
+});
+
+  
+
 // Function to update UI based on user login status
 async function updateAuthUI(user) {
   const userEmailElement = document.getElementById('user-email');
