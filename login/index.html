@@ -307,7 +307,7 @@ function doSignup() {
     password: pass,
     options: {
       data: {first_name:first, last_name:last, phone:phone, city:city},
-      emailRedirectTo: 'https://grailmessagekenya.netlify.app/welcome/'
+      emailRedirectTo: 'https://grailmessagekenya.eu.org/.netlify/identity'
     }
   })
   .then(function(res) {
@@ -352,7 +352,7 @@ function doForgot() {
   showLoading();
 
   _sb.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://grailmessagekenya.netlify.app/reset-password/'
+    redirectTo: 'https://grailmessagekenya.eu.org/.netlify/identity'
   })
   .then(function() {
     hideLoading();
