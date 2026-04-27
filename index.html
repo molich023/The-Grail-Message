@@ -1546,91 +1546,64 @@
     });
   });
 <script>
-  /**
-   * 1. PERSISTENT STATE MANAGEMENT
-   * Uses sessionStorage so the browser "remembers" you are logged in
-   * without having to reload the entire page.
-   */
-  const AppState = {
-    isLoggedIn: () => sessionStorage.getItem('isLoggedIn') === 'true',
-    getUser: () => sessionStorage.getItem('username') || 'Member',
-    
-    // Call this when your login form succeeds
-    login: (username) => {
-      sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('username', username);
-      updateView();
-    },
-    
-    logout: () => {
-      sessionStorage.clear();
-      window.location.hash = '#login';
-      updateView();
-    }
-  };
+// Initialize Supabase client
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
 
-  /**
-   * 2. DYNAMIC UI UPDATER
-   * This function updates the Navbar and sections WITHOUT bouncing.
-   */
-  function updateView() {
-    const navLinks = document.querySelector('.nav-links');
-    if (!navLinks) return;
+// Function to update UI based on user login status
+async function updateAuthUI(user) {
+  const userEmailElement = document.getElementById('user-email');
+  const logoutButton = document.getElementById('logout-button');
 
-    if (AppState.isLoggedIn()) {
-      // Logged In View
-      navLinks.innerHTML = `
-        <li><a href="#home">Home</a></li>
-        <li><a href="#books">Books</a></li>
-        <li><a href="#about">About</a></li>
-        <li><span style="color:var(--gold-dark); margin: 0 15px; font-weight:bold;">Welcome, ${AppState.getUser()}</span></li>
-        <li><a href="#" id="logoutAction" style="color:var(--gold-dark); cursor:pointer;">Logout</a></li>
-      `;
-      
-      // Attach logout event
-      document.getElementById('logoutAction').onclick = (e) => {
-        e.preventDefault();
-        AppState.logout();
-      };
-    } else {
-      // Public View
-      navLinks.innerHTML = `
-        <li><a href="#home">Home</a></li>
-        <li><a href="#books">Books</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#login">Login</a></li>
-      `;
+  if (user) {
+    if (userEmailElement) userEmailElement.textContent = user.email;
+    if (logoutButton) logoutButton.style.display = 'inline-block';
+  } else {
+    if (userEmailElement) userEmailElement.textContent = '';
+    if (logoutButton) logoutButton.style.display = 'none';
+  }
+}
+
+// Function to handle logout
+async function handleLogout() {
+  await supabase.auth.signOut();
+  window.location.href = "/login"; 
+}
+
+// SINGLE SOURCE OF TRUTH FOR AUTH
+supabase.auth.onAuthStateChange((event, session) => {
+  const path = window.location.pathname;
+  const user = session?.user || null;
+
+  updateAuthUI(user);
+
+  if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+    if (user && path === '/login') {
+      window.location.href = '/';
     }
   }
 
-  /**
-   * 3. SMOOTH NAVIGATION & AUTO-CLOSE MODALS
-   */
-  document.addEventListener('click', function(e) {
-    const anchor = e.target.closest('a');
-    
-    // Handle Internal Links (#)
-    if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
-      const targetId = anchor.getAttribute('href');
-      if (targetId === '#') return;
-
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      }
+  if (event === 'SIGNED_OUT') {
+    if (path !== '/login') {
+      window.location.href = '/login';
     }
+  }
+});
 
-    // Handle Buy Buttons
-    if (e.target.classList.contains('buy-btn') || e.target.classList.contains('mobile-buy-btn')) {
-      e.preventDefault();
-      if (typeof showShippingModal === 'function') showShippingModal();
-    }
-  });
-
-  // Initialize on Load
-  window.addEventListener('DOMContentLoaded', updateView);
+// Check session once on startup to handle the very first load
+window.addEventListener('load', async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  const path = window.location.pathname;
+  
+  if (!session && path !== '/login') {
+    window.location.href = '/login';
+  } else if (session && path === '/login') {
+    window.location.href = '/';
+  }
+});
 </script>
+
 
 </body>
 </html>
