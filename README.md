@@ -3,9 +3,9 @@
 **Alexander Bernhardt Publishing Company Kenya**
 Authorised Distributor of the works of Abd-ru-shin in Kenya and East Africa
 
-🌐 **Live Site:** https://grailmessagekenya.netlify.app
+🌐 **Live Site:** https://grailmessagekenya.eu.org
 📦 **Repository:** https://github.com/molich023/The-Grail-Message
-📧 **Contact:** info@grailmessagekenya.co.ke
+📧 **Contact:** info@grailmessagekenya.eu.org
 📞 **Phone:** +254 736 340 024
 📮 **Address:** P.O. Box 237-00208, Ngong Hills, Kenya
 
