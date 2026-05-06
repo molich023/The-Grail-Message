@@ -1589,6 +1589,33 @@ supabase.auth.onAuthStateChange(async (event, session) => {
   }
 });
 
+  async function signInUser(email, password) {
+  // 1. Get the hCaptcha response token
+  const captchaToken = hcaptcha.getResponse();
+
+  // 2. Check if the user completed the captcha
+  if (!captchaToken) {
+    alert("Please complete the captcha challenge before logging in.");
+    return;
+  }
+
+  // 3. Include the token in the signInWithPassword call
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+    options: {
+      captchaToken: captchaToken,
+    },
+  });
+
+  if (error) {
+    alert("Login failed: " + error.message);
+    hcaptcha.reset(); // Always reset the captcha so they can try again
+  } else {
+    alert("Login successful!");
+    window.location.href = "/"; // Or wherever your dashboard is
+  }
+  }
   
 
 // Function to update UI based on user login status
