@@ -1597,9 +1597,37 @@ supabase.auth.onAuthStateChange(async (event, session) => {
   }
 });
 
-  async function signInUser(email, password) {
-  // 1. Get the hCaptcha response token
+  async function handleLogin(e) {
+  if (e) e.preventDefault();
+
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  // 1. Capture the token from the hCaptcha widget
   const captchaToken = hcaptcha.getResponse();
+
+  if (!captchaToken) {
+    alert("Please complete the captcha challenge.");
+    return;
+  }
+
+  // 2. Send the token to Supabase
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+    options: {
+      captchaToken: captchaToken, // This fixes the "no captcha_token found" error
+    },
+  });
+
+  if (error) {
+    alert("Login failed: " + error.message);
+    if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+  } else {
+    window.location.href = "/";
+  }
+  }
+  
 
   // 2. Check if the user completed the captcha
   if (!captchaToken) {
