@@ -1626,14 +1626,7 @@ supabase.auth.onAuthStateChange(async (event, session) => {
   } else {
     window.location.href = "/";
   }
-  }
   
-
-  // 2. Check if the user completed the captcha
-  if (!captchaToken) {
-    alert("Please complete the captcha challenge before logging in.");
-    return;
-  }
 
   // 3. Include the token in the signInWithPassword call
   const { data, error } = await supabase.auth.signInWithPassword({
