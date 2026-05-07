@@ -1603,30 +1603,65 @@ supabase.auth.onAuthStateChange(async (event, session) => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
-  // 1. Capture the token from the hCaptcha widget
-  const captchaToken = hcaptcha.getResponse();
+  function doLogin() {
+  if (!_sb) { 
+    alert('Database connection error. Please refresh the page.'); 
+    return; 
+  }
 
-  if (!captchaToken) {
-    alert("Please complete the captcha challenge.");
+  // 1. Check if hCaptcha is loaded
+  if (typeof hcaptcha === 'undefined') {
+    showMsg('eL', 'Security script is still loading. Please wait a moment and try again.', 'err');
     return;
   }
 
-  // 2. Send the token to Supabase
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-    options: {
-      captchaToken: captchaToken, // This fixes the "no captcha_token found" error
-    },
-  });
+  var email = (document.getElementById('lEmail').value || '').trim();
+  var pass = document.getElementById('lPass').value || '';
 
-  if (error) {
-    alert("Login failed: " + error.message);
-    if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
-  } else {
-    window.location.href = "/";
+  hideMsg('eL'); hideMsg('sL');
+
+  if (!email || !pass) {
+    showMsg('eL', 'Please enter your email and password.', 'err');
+    return;
   }
-  
+
+  // 2. Get the Captcha Token
+  const captchaToken = hcaptcha.getResponse();
+  if (!captchaToken) {
+    showMsg('eL', 'Please complete the checkbox challenge above.', 'err');
+    return;
+  }
+
+  setBtn('bLogin', 'Signing in...', false);
+  showLoading();
+
+  // 3. Send request to Supabase
+  _sb.auth.signInWithPassword({
+    email: email, 
+    password: pass, 
+    options: { captchaToken: captchaToken } // This tells Supabase we solved the captcha
+  })
+  .then(function(res) {
+    hideLoading();
+    setBtn('bLogin', '🔐 Sign In', true);
+    
+    if (res.error) {
+      showMsg('eL', friendlyErr(res.error.message), 'err');
+      hcaptcha.reset(); // Always reset so they can try again
+      return;
+    }
+    
+    showMsg('sL', '✅ Welcome back! Taking you in...', 'ok');
+    setTimeout(function() { window.location.replace('/'); }, 1000);
+  })
+  .catch(function(err) {
+    hideLoading();
+    setBtn('bLogin', '🔐 Sign In', true);
+    showMsg('eL', friendlyErr(err.message), 'err');
+    if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+  });
+}
+
 
   // 3. Include the token in the signInWithPassword call
   const { data, error } = await supabase.auth.signInWithPassword({
