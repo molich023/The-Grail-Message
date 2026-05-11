@@ -1,8 +1,16 @@
 {
-  "name": "grailmessage-kenya",
-  "version": "1.0.0",
-  "description": "Grail Message Kenya — Alexander Bernhardt Publishing Company Kenya",
+  "name": "grail-message-kenya-portal",
+  "version": "2.0.0",
+  "description": "Luminous Portal for Grail Message Kenya",
+  "main": "index.js",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
-  }
+    "@supabase/supabase-js": "^2.39.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Grail Message Kenya",
+  "license": "ISC"
 }
