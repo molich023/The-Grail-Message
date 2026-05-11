@@ -1,8 +1,10 @@
 const ALLOWED_ORIGINS = [
+  'https://grailmessagekenya.eu.org',      // Add this line
   'https://grailmessagekenya.netlify.app',
   'http://localhost:3000',
   'http://localhost:8888'
 ];
+
 function secureHeaders(origin = '') {
   const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
