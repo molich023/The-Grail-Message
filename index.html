@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In the Light of Truth | Grail Message Kenya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --ethereal: #fcfdfd;
+            --text: #2c3e50;
+            --accent: #b2d8d8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(180deg, #ffffff 0%, #f0f7f9 100%);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .luminous-header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, #ffffff 0%, rgba(212, 175, 55, 0.05) 100%);
+        }
+        h1 { font-family: 'Cinzel', serif; font-size: 3rem; color: var(--gold); margin-bottom: 1rem; letter-spacing: 4px; }
+        .quote-card {
+            max-width: 800px;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+            color: var(--text);
+            opacity: 0.9;
+        }
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            outline: none;
+        }
+        .btn-gold {
+            width: 100%;
+            padding: 15px;
+            background: var(--gold);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cinzel', serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-gold:hover { background: #b8962d; transform: translateY(-2px); }
+        #msg { margin-top: 15px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <section class="luminous-header">
+        <div class="symbol" style="font-size: 3rem; color: var(--gold); margin-bottom: 20px;">✦</div>
+        <h1>In the Light of Truth</h1>
+        
+        <div class="quote-card" id="dailyQuote">
+            "Keep the hearth of your thoughts pure, by so doing you will bring peace and be happy!"
+        </div>
+
+        <div class="form-container">
+            <h3 style="margin-bottom: 20px; font-family: 'Cinzel';">Join the Circle</h3>
+            <input type="email" id="uEmail" placeholder="Your Email Address">
+            <input type="password" id="uPass" placeholder="Choose a Password">
+            
+            <div style="display:flex; justify-content:center; margin: 15px 0;">
+                <div class="h-captcha" data-sitekey="8d80ef5a-e924-4552-bd64-19725ab010b8"></div>
+            </div>
+
+            <button class="btn-gold" onclick="doSignUp()">Receive the Light</button>
+            <div id="msg"></div>
+        </div>
+        
+        <p style="margin-top: 30px; font-size: 0.8rem; color: var(--gold);">Grail Message Kenya — Spiritual Enlightenment for the Future</p>
+    </section>
+
+    <script>
+        const _sb = supabase.createClient('https://ecxdrwomkxcuxlhqdtum.supabase.co', 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l');
+
+        async function doSignUp() {
+            const email = document.getElementById('uEmail').value;
+            const pass = document.getElementById('uPass').value;
+            const msg = document.getElementById('msg');
+            const captchaToken = hcaptcha.getResponse();
+
+            if (!captchaToken) {
+                msg.style.color = "red";
+                msg.innerText = "Please verify you are a human.";
+                return;
+            }
+
+            msg.style.color = "gold";
+            msg.innerText = "Sending request...";
+
+            const { data, error } = await _sb.auth.signUp({
+                email: email,
+                password: pass,
+                options: { captchaToken: captchaToken }
+            });
+
+            if (error) {
+                msg.style.color = "red";
+                msg.innerText = error.message;
+                hcaptcha.reset();
+            } else {
+                msg.style.color = "green";
+                msg.innerText = "Verification link sent! Check your email.";
+            }
+        }
+    </script>
+</body>
+</html>
