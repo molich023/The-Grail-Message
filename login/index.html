@@ -48,7 +48,7 @@
     @keyframes spin{to{transform:rotate(360deg);}}
     @media(max-width:480px){.row2{grid-template-columns:1fr;}}
   </style>
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -129,7 +129,7 @@
       <label class="lbl">Email Address</label>
       <input type="email" id="fEmail" class="inp" placeholder="your@email.com"
         onkeydown="if(event.key==='Enter')doForgot()"/>
-      <div class="h-captcha" data-sitekey="026a4844-e294-427a-8df4-e45a09cca038" style="margin-bottom: 15px; display: flex; justify-content: center;"></div>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAADNaXWIVk_auTUCW" data-theme="light"></div>
       <button class="btn" id="bForgot" onclick="doForgot()">📧 Send Reset Link</button>
       <hr class="hr"/>
       <p class="hint"><a onclick="goTab('login')">← Back to Sign In</a></p>
@@ -309,7 +309,7 @@ function doSignup() {
     return;
   }
 
-  const captchaToken = hcaptcha.getResponse();
+  const captchaToken = turnstile.getResponse();
   if (!captchaToken) {
     showMsg('eS', 'Please complete the captcha challenge.', 'err');
     return;
@@ -365,7 +365,7 @@ function doForgot() {
     return;
   }
 
-  const captchaToken = hcaptcha.getResponse();
+  const captchaToken = turnstile.getResponse();
   if (!captchaToken) {
     showMsg('eF', 'Please complete the captcha challenge.', 'err');
     return;
