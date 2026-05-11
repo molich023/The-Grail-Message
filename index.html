@@ -84,54 +84,88 @@
         </div>
 
         <div class="form-container">
-            <h3 style="margin-bottom: 20px; font-family: 'Cinzel';">Join the Circle</h3>
-            <input type="email" id="uEmail" placeholder="Your Email Address">
-            <input type="password" id="uPass" placeholder="Choose a Password">
-            
-            <div style="display:flex; justify-content:center; margin: 15px 0;">
-                <div class="h-captcha" data-sitekey="8d80ef5a-e924-4552-bd64-19725ab010b8"></div>
-            </div>
+    <h3 style="margin-bottom: 20px; font-family: 'Cinzel'; color: var(--gold);">Join the Circle</h3>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <input type="text" id="fName" placeholder="First Name">
+        <input type="text" id="lName" placeholder="Last Name">
+    </div>
+    <input type="email" id="uEmail" placeholder="Email Address">
+    <input type="text" id="uPhone" placeholder="Phone (e.g. 0712...)">
+    <input type="text" id="uCity" placeholder="City">
 
-            <button class="btn-gold" onclick="doSignUp()">Receive the Light</button>
-            <div id="msg"></div>
-        </div>
-        
+    <div style="display:flex; justify-content:center; margin: 15px 0;">
+        <div class="h-captcha" data-sitekey="8d80ef5a-e924-4552-bd64-19725ab010b8"></div>
+    </div>
+
+    <button class="btn-gold" onclick="saveSeeker()">Receive the Light</button>
+    <div id="msg" style="margin-top:10px; font-size:0.8rem;"></div>
+</div>
+
+
         <p style="margin-top: 30px; font-size: 0.8rem; color: var(--gold);">Grail Message Kenya — Spiritual Enlightenment for the Future</p>
     </section>
-
+    
     <script>
-        const _sb = supabase.createClient('https://ecxdrwomkxcuxlhqdtum.supabase.co', 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l');
+    // Ensure Supabase is initialized correctly
+const _sb = supabase.createClient('https://ecxdrwomkxcuxlhqdtum.supabase.co', 'sb_publishable_RSqxhGRfsiQx95M77jnQzQ_K2jlVp3l');
 
-        async function doSignUp() {
-            const email = document.getElementById('uEmail').value;
-            const pass = document.getElementById('uPass').value;
-            const msg = document.getElementById('msg');
-            const captchaToken = hcaptcha.getResponse();
+async function doSignUp() {
+    const email = document.getElementById('uEmail').value.trim();
+    const pass = document.getElementById('uPass').value;
+    const msg = document.getElementById('msg');
+    
+    // 1. Validation
+    if (!email || !pass) {
+        alert("Please provide both an email and a password to join the circle.");
+        return;
+    }
 
-            if (!captchaToken) {
-                msg.style.color = "red";
-                msg.innerText = "Please verify you are a human.";
-                return;
+    // 2. hCaptcha Check (The most common point of failure)
+    if (typeof hcaptcha === 'undefined') {
+        alert("Security service is still loading. Please refresh the page in 5 seconds.");
+        return;
+    }
+
+    const captchaToken = hcaptcha.getResponse();
+    if (!captchaToken) {
+        msg.style.color = "#D4AF37"; // Gold
+        msg.innerText = "Kindly verify the 'I am human' checkbox above.";
+        return;
+    }
+
+    // 3. UI Feedback
+    const btn = document.querySelector('.btn-gold');
+    btn.disabled = true;
+    btn.innerText = "Connecting...";
+    msg.innerText = "Seeking the Light...";
+
+    try {
+        const { data, error } = await _sb.auth.signUp({
+            email: email,
+            password: pass,
+            options: { 
+                captchaToken: captchaToken,
+                emailRedirectTo: 'https://grailmessagekenya.eu.org/admin' 
             }
+        });
 
-            msg.style.color = "gold";
-            msg.innerText = "Sending request...";
+        if (error) throw error;
 
-            const { data, error } = await _sb.auth.signUp({
-                email: email,
-                password: pass,
-                options: { captchaToken: captchaToken }
-            });
+        msg.style.color = "green";
+        msg.innerText = "A path has been opened. Check your email to confirm.";
+        btn.innerText = "Sent Successfully";
 
-            if (error) {
-                msg.style.color = "red";
-                msg.innerText = error.message;
-                hcaptcha.reset();
-            } else {
-                msg.style.color = "green";
-                msg.innerText = "Verification link sent! Check your email.";
-            }
-        }
-    </script>
+    } catch (err) {
+        console.error("Signup Error:", err);
+        msg.style.color = "red";
+        msg.innerText = "Error: " + err.message;
+        btn.disabled = false;
+        btn.innerText = "Receive the Light";
+        if(typeof hcaptcha !== 'undefined') hcaptcha.reset();
+    }
+}
+  </script>  
+    
 </body>
 </html>
