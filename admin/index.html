@@ -6,7 +6,7 @@
     <title>Admin Sanctuary | Grail Message Kenya</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
         :root {
             --gold: #D4AF37;
@@ -70,7 +70,7 @@
             border-radius: 8px; font-family: 'Cinzel'; cursor: pointer; transition: 0.3s;
         }
         .btn:hover { transform: translateY(-2px); opacity: 0.9; }
-        .h-captcha { margin: 15px 0; display: flex; justify-content: center; z-index: 9999; position: relative; }
+        .turnstile { margin: 15px 0; display: flex; justify-content: center; z-index: 9999; position: relative; }
     </style>
 </head>
 <body>
@@ -84,7 +84,8 @@
             <input type="email" id="admEmail" placeholder="Guardian Email">
             <input type="password" id="admPass" placeholder="Security Key">
             
-            <div class="h-captcha" data-sitekey="8d80ef5a-e924-4552-bd64-19725ab010b8"></div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADNaXWIVk_auTUCW"></div>
+            
 
             <button class="btn" onclick="adminSignIn()" id="btnText">Enter Dashboard</button>
             <p id="err" style="color:red; font-size: 0.8rem; margin-top: 10px;"></p>
@@ -124,7 +125,7 @@
         async function adminSignIn() {
             const email = document.getElementById('admEmail').value;
             const pass = document.getElementById('admPass').value;
-            const token = hcaptcha.getResponse();
+            const token = turnstile.getResponse();
             const btn = document.getElementById('btnText');
 
             if (!token) { alert("Please verify your humanity."); return; }
@@ -138,7 +139,7 @@
             if (error) {
                 document.getElementById('err').innerText = error.message;
                 btn.innerText = "Enter Dashboard";
-                hcaptcha.reset();
+                turnstile.reset();
             } else {
                 showDashboard();
             }
