@@ -94,6 +94,52 @@
             <button class="btn-gold" onclick="buyLecture('The World', 100)">Unlock Audio (KES 100)</button>
         </div>
     </div>
+      <div id="audio-sanctuary" style="display:none; margin-top: 30px; padding: 20px; background: #fff; border-radius: 15px; border: 1px solid var(--gold);">
+    <h3 style="font-family: 'Cinzel'; color: var(--gold);">Listen to the Light</h3>
+    <p id="lecture-title" style="font-weight: 600;"></p>
+    <audio id="main-player" controls controlsList="nodownload" style="width: 100%;">
+        <source id="audio-source" src="" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+   </div>
+
+<script>
+async function checkAccessAndPlay(lectureName, userEmail) {
+    const msg = document.getElementById('msg');
+    
+    // 1. Check Supabase for a 'completed' order for this email and lecture
+    const { data, error } = await supabase
+        .from('orders')
+        .select('status, items')
+        .eq('email', userEmail)
+        .eq('status', 'completed');
+
+    // 2. Filter to see if the specific lecture is in their purchased items
+    const hasAccess = data?.some(order => 
+        order.items.some(item => item.name === lectureName)
+    );
+
+    if (hasAccess) {
+        // 3. Reveal the player and set the source
+        document.getElementById('audio-sanctuary').style.display = 'block';
+        document.getElementById('lecture-title').innerText = lectureName;
+        
+        // Use a secure redirect or signed URL for the source
+        const audioPath = `/api/stream-lecture?lecture=${btoa(lectureName)}&email=${btoa(userEmail)}`;
+        document.getElementById('audio-source').src = audioPath;
+        document.getElementById('main-player').load();
+        document.getElementById('main-player').play();
+        
+        msg.innerText = "The Path is open. Listening to: " + lectureName;
+    } else {
+        msg.style.color = "var(--gold)";
+        msg.innerText = "This lecture is currently veiled. Kindly support the mission to unlock.";
+        // Trigger M-Pesa push if they haven't paid
+        buyLecture(lectureName, 100);
+    }
+}
+</script>
+
 </section>
     
 <script>
@@ -163,6 +209,23 @@ function addToCart(bookName, price) {
 
 function updateCartUI() {
     const total = cart.reduce((sum, item) => sum + item.price, 0);
+   // Inside your orderTableBody.map logic:
+`<td>
+    ${order.status === 'pending' ? 
+    `<button onclick="manualApprove('${order.id}')" style="font-size: 10px;">Manual Approve</button>` : 
+    'Unlocked'}
+</td>`
+
+// The function to approve
+async function manualApprove(orderId) {
+    const { error } = await supabase
+        .from('orders')
+        .update({ status: 'completed', mpesa_receipt: 'MANUAL_AUTH' })
+        .eq('id', orderId);
+        
+    if (!error) loadOrders(); // Refresh table
+}
+    
     // You can display this total near a 'Checkout' button
     console.log("Current Total: KES " + total);
 }
