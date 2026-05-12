@@ -130,6 +130,40 @@
             turnstile.reset();
         }
     }
+    let cart = [];
+
+function addToCart(bookName, price) {
+    cart.push({ name: bookName, price: price });
+    updateCartUI();
+    alert(bookName + " added to your circle.");
+}
+
+function updateCartUI() {
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    // You can display this total near a 'Checkout' button
+    console.log("Current Total: KES " + total);
+}
+
+async function checkout() {
+    if (cart.length === 0) return alert("Your cart is empty.");
+    
+    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    const phoneNumber = document.getElementById('uPhone').value;
+
+    if (!phoneNumber) return alert("Please provide your phone number in the form above.");
+
+    // Trigger M-Pesa STK Push
+    const res = await fetch('/api/mpesa-payment', {
+        method: 'POST',
+        body: JSON.stringify({
+            amount: totalAmount,
+            phone: phoneNumber,
+            items: cart
+        })
+    });
+    // ... handle response
+}
+    
 </script>
 </body>
 </html>
