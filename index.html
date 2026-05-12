@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In the Light of Truth | Grail Message Kenya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        :root { 
+            --sky-blue: #87CEEB; 
+            --sunshine-light: #fdfcf0;
+            --deep-ocean: #0d2a42;
+            --soft-white: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Sunshine Sky Gradient */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
+            color: var(--deep-ocean); margin: 0; min-height: 100vh;
+        }
+
+        h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--deep-ocean); text-align: center; }
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+
+        /* --- THE ENTRY GATE (Initial View) --- */
+        #entry-gate { 
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
+        .auth-card { 
+            background: var(--soft-white); padding: 40px; border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
+        }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+        .tab { flex: 1; padding: 10px; cursor: pointer; text-align: center; font-family: 'Cinzel'; font-size: 0.8rem; }
+        .tab.active { color: var(--sky-blue); border-bottom: 3px solid var(--sky-blue); font-weight: bold; }
+
+        /* --- THE SANCTUARY (Post-Login View) --- */
+        #sanctuary { display: none; padding-top: 40px; animation: fadeIn 1.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .section-card { 
+            background: var(--soft-white); padding: 40px; border-radius: 24px; 
+            margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* Bio Styles */
+        .bio-text { font-family: 'EB Garamond', serif; font-size: 1.2rem; line-height: 1.8; text-align: justify; }
+
+        /* Bookstore Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .book-card { 
+            background: white; padding: 25px; border-radius: 15px; border-left: 5px solid var(--sky-blue);
+            transition: 0.3s;
+        }
+        .book-card:hover { transform: scale(1.02); }
+        .book-summary { font-size: 0.85rem; color: #555; font-style: italic; margin: 10px 0; }
+
+        /* UI Elements */
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn-main { 
+            background: var(--deep-ocean); color: white; border: none; padding: 15px; 
+            border-radius: 8px; cursor: pointer; font-family: 'Cinzel'; width: 100%; margin-top: 10px;
+        }
+        
+        .currency-switch { text-align: right; margin-bottom: 20px; }
+        .currency-btn { cursor: pointer; padding: 5px 10px; border: 1px solid var(--sky-blue); border-radius: 5px; font-size: 0.7rem; }
+
+        /* Cart Floating Bar */
+        #cart-bar { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--deep-ocean); color: white; padding: 15px 30px; 
+            border-radius: 50px; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="entry-gate">
+        <h1 style="color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">In the Light of Truth</h1>
+        <div class="auth-card">
+            <div class="tabs">
+                <div class="tab active" id="loginTab" onclick="switchTab('login')">Member Login</div>
+                <div class="tab" id="joinTab" onclick="switchTab('join')">Join Circle</div>
+            </div>
+            
+            <div id="loginForm">
+                <input type="email" id="logEmail" placeholder="Email Address">
+                <input type="password" id="logPass" placeholder="Guardian Password">
+                <button class="btn-main" onclick="unlockSanctuary()">Enter Sanctuary</button>
+            </div>
+
+            <div id="joinForm" style="display:none;">
+                <input type="text" id="uName" placeholder="Full Name">
+                <input type="email" id="uEmail" placeholder="Email">
+                <input type="text" id="uPhone" placeholder="Phone (M-Pesa)">
+                <button class="btn-main" onclick="unlockSanctuary()">Join the Circle</button>
+            </div>
+            <div style="margin-top:15px;" class="cf-turnstile" data-sitekey="0x4AAAAAADNaXWIVk_auTUCW"></div>
+        </div>
+    </div>
+
+    <div id="sanctuary">
+        
+        <section class="section-card">
+            <h2>The Author: Abd-ru-shin</h2>
+            <div class="bio-text">
+                <p>Abd-ru-shin (1875–1941) was born Oskar Ernst Bernhardt in Germany. From 1923, he began writing the lectures of the Grail Message, "In the Light of Truth." His work serves as a guide for those seeking spiritual clarity, explaining the Laws of Creation—such as Sowing and Reaping—with unwavering logic. He did not seek to form a new religion, but to lead the individual back to a conscious, responsible existence before the Creator.</p>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>Spiritual Insights</h2>
+            <div class="grid" id="insights-grid">
+                </div>
+        </section>
+
+        <section class="section-card">
+            <div class="currency-switch">
+                <span class="currency-btn" onclick="updateCurrency('KES')">KES</span>
+                <span class="currency-btn" onclick="updateCurrency('USD')">USD</span>
+                <span class="currency-btn" onclick="updateCurrency('EUR')">EUR</span>
+            </div>
+            <h2>The Bookstore</h2>
+            <div class="grid" id="books-grid">
+                </div>
+        </section>
+
+        <section class="section-card">
+            <h2>Monetized Audio Lectures</h2>
+            <div class="grid" id="audio-grid">
+                </div>
+        </section>
+
+    </div>
+</div>
+
+<div id="cart-bar">
+    <span id="cart-count">Items: 0</span> | <span id="cart-total">Total: KES 0</span> 
+    <button onclick="openCheckout()" style="background:var(--sky-blue); border:none; padding:5px 15px; border-radius:20px; margin-left:15px; cursor:pointer;">Checkout</button>
+</div>
+
+<script>
+    let cart = [];
+    let currentCurrency = 'KES';
+    const exchange = { KES: 1, USD: 130, EUR: 140 };
+
+    const books = [
+        { title: "In the Light of Truth Vol. I", price: 1500, summary: "The foundation of the Grail Message, explaining the Laws of Creation." },
+        { title: "In the Light of Truth Vol. II", price: 1500, summary: "Deepening the understanding of the spiritual path and human fate." },
+        { title: "In the Light of Truth Vol. III", price: 1500, summary: "The completion of the message, looking toward the end of days." },
+        { title: "The Ten Commandments", price: 1200, summary: "A vivid explanation of the Laws given through Moses." },
+        { title: "Questions and Answers", price: 1800, summary: "Direct answers to complex spiritual inquiries from seekers." },
+        { title: "Prayers for Mankind", price: 800, summary: "A collection of spiritual meditations and prayers." },
+        { title: "The Resurrection", price: 1000, summary: "Clarifying the transition of the soul from earth to the beyond." },
+        { title: "Life After Death", price: 1000, summary: "What awaits every human being upon leaving the physical body." },
+        { title: "Fate and Karma", price: 1000, summary: "The mechanics of the Law of Reciprocal Action." },
+        { title: "Inner Awakening", price: 900, summary: "How to stir the spirit into conscious existence." }
+    ];
+
+    const audios = [
+        { title: "The Silence", price: 20 },
+        { title: "Ascent", price: 20 },
+        { title: "Responsibility", price: 20 },
+        { title: "The World", price: 20 },
+        { title: "The Star", price: 20 }
+    ];
+
+    const insights = [
+        { title: "Fate", content: "Fate is the ripening of the seeds we have sown ourselves through our thoughts and deeds..." },
+        { title: "Human Spirit", content: "The spirit is the only truly living thing in the human being, a spark from the spiritual realm..." },
+        { title: "The Law of Reciprocity", content: "What you sow, you must reap—this is the iron law that governs all life." }
+    ];
+
+    function unlockSanctuary() {
+        document.getElementById('entry-gate').style.display = 'none';
+        document.getElementById('sanctuary').style.display = 'block';
+        renderInsights();
+        renderBooks();
+        renderAudios();
+    }
+
+    function switchTab(type) {
+        document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
+        document.getElementById('joinForm').style.display = type === 'join' ? 'block' : 'none';
+        document.getElementById('loginTab').classList.toggle('active', type === 'login');
+        document.getElementById('joinTab').classList.toggle('active', type === 'join');
+    }
+
+    function renderInsights() {
+        document.getElementById('insights-grid').innerHTML = insights.map(i => `
+            <div class="book-card">
+                <h3>${i.title}</h3>
+                <p id="ins-${i.title}">${i.content.substring(0, 40)}...</p>
+                <button onclick="this.previousElementSibling.innerText='${i.content}'" style="color:var(--sky-blue); background:none; border:none; cursor:pointer;">Read More</button>
+            </div>
+        `).join('');
+    }
+
+    function renderBooks() {
+        document.getElementById('books-grid').innerHTML = books.map(b => `
+            <div class="book-card">
+                <h3>${b.title}</h3>
+                <p class="book-summary">${b.summary}</p>
+                <p><strong>${currentCurrency} ${(b.price / exchange[currentCurrency]).toFixed(2)}</strong></p>
+                <button class="btn-main" onclick="addToCart('${b.title}', ${b.price})">Add to Cart</button>
+            </div>
+        `).join('');
+    }
+
+    function renderAudios() {
+        document.getElementById('audio-grid').innerHTML = audios.map(a => `
+            <div class="book-card">
+                <h3>${a.title}</h3>
+                <p>Price: ${currentCurrency} ${(a.price / exchange[currentCurrency]).toFixed(2)}</p>
+                <button class="btn-main" onclick="addToCart('${a.title}', ${a.price})">Unlock Lecture</button>
+            </div>
+        `).join('');
+    }
+
+    function addToCart(name, price) {
+        cart.push({ name, price });
+        document.getElementById('cart-bar').style.display = 'block';
+        document.getElementById('cart-count').innerText = `Items: ${cart.length}`;
+        const total = cart.reduce((s, i) => s + i.price, 0);
+        document.getElementById('cart-total').innerText = `Total: KES ${total}`;
+    }
+
+    function updateCurrency(cur) {
+        currentCurrency = cur;
+        renderBooks();
+        renderAudios();
+    }
+</script>
+
+</body>
+</html>
