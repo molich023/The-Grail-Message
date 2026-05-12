@@ -72,7 +72,30 @@
         <div id="msg"></div>
     </div>
 </section>
+<section id="lectures" style="padding: 60px 20px; background: #f4f7f6;">
+    <h2 style="font-family: 'Cinzel'; color: var(--gold);">Spiritual Insights</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, min-minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: auto;">
+        
+        <div class="lecture-card">
+            <h3>Fate</h3>
+            <p>Why do bad things happen? Understand the Law of Sowing and Reaping.</p>
+            <button class="btn-gold" onclick="buyLecture('Fate', 100)">Unlock Audio (KES 100)</button>
+        </div>
 
+        <div class="lecture-card">
+            <h3>Responsibility</h3>
+            <p>Are you the master of your life? A deep look at free will.</p>
+            <button class="btn-gold" onclick="buyLecture('Responsibility', 100)">Unlock Audio (KES 100)</button>
+        </div>
+
+        <div class="lecture-card">
+            <h3>The World</h3>
+            <p>What is the purpose of our existence here on Earth?</p>
+            <button class="btn-gold" onclick="buyLecture('The World', 100)">Unlock Audio (KES 100)</button>
+        </div>
+    </div>
+</section>
+    
 <script>
     function switchTab(type) {
         document.getElementById('joinForm').style.display = type === 'join' ? 'block' : 'none';
