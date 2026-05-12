@@ -227,7 +227,17 @@ async function manualApprove(orderId) {
 }
     
     // You can display this total near a 'Checkout' button
-    console.log("Current Total: KES " + total);
+    <div id="shipping-gate" style="display:none; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid var(--gold);">
+    <h3 style="font-family: 'Cinzel';">Delivery Details</h3>
+    <select id="shipMethod" onchange="updateTotal()" style="width:100%; padding:10px; margin: 10px 0;">
+        <option value="nairobi">Nairobi Delivery (KES 250)</option>
+        <option value="upcountry">Upcountry - Fargo Courier (KES 450)</option>
+        <option value="pickup">Pick up at GrailMessage (Free)</option>
+    </select>
+    <textarea id="shipAddress" placeholder="Imara Daima - Nairobi" style="width:100%; padding:10px;"></textarea>
+    <button class="btn-gold" onclick="initiatePayment()">Pay with M-Pesa</button>
+</div>
+    
 }
 
 async function checkout() {
