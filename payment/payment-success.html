@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Status — Grail Message Kenya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue: #1a6aad; --dark: #0d2a42; --gold: #D4AF37; --muted: #3a6a90; --light: #e8f4fd; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      font-family: 'EB Garamond', serif; color: var(--dark);
+    }
+    .card {
+      background: rgba(255,255,255,0.98); border-radius: 16px; padding: 3rem 2rem;
+      max-width: 500px; width: 92%; text-align: center;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.12); border-top: 5px solid var(--gold);
+    }
+    .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .title { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
+    .subtitle { font-size: 1rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+    .detail-box { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; text-align: left; }
+    .detail-row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid #eee; font-size: .9rem; }
+    .detail-row:last-child { border-bottom: none; }
+    .badge { padding: .3rem .8rem; border-radius: 20px; font-size: .7rem; font-family: 'Cinzel'; font-weight: 600; text-transform: uppercase; }
+    .badge-completed { background: #d4edda; color: #155724; }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .btn { display: block; width: 100%; padding: 1rem; font-family: 'Cinzel'; font-size: .8rem; border-radius: 6px; cursor: pointer; text-decoration: none; margin-top: 10px; }
+    .btn-gold { background: var(--gold); color: white; border: none; }
+    .spinner { width: 30px; height: 30px; border: 3px solid #eee; border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="spinner"></div>
+  <p>Communing with the system...</p>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const checkoutId = params.get('checkout_id'); // Match what we save in mpesa-payment.js
+  let attempts = 0;
+
+  async function pollStatus() {
+    if (!checkoutId) {
+      renderError("No transaction ID found.");
+      return;
+    }
+
+    try {
+      // We call our internal status checker
+      const res = await fetch(`/.netlify/functions/mpesa-status?checkout_id=${checkoutId}`);
+      const data = await res.json();
+
+      if (data.status === 'completed') {
+        renderSuccess(data);
+      } else if (data.status === 'failed') {
+        renderFailed(data);
+      } else if (attempts < 15) { // Poll for ~30 seconds
+        attempts++;
+        setTimeout(pollStatus, 2000);
+      } else {
+        renderPending();
+      }
+    } catch (err) {
+      renderError("Connection lost. Please refresh.");
+    }
+  }
+
+  function renderSuccess(data) {
+    document.getElementById('card').innerHTML = `
+      <div class="icon" style="color:green">✔</div>
+      <h1 class="title">Payment Successful</h1>
+      <p class="subtitle">Your order is confirmed. The Light of Truth is on its way to you.</p>
+      <div class="detail-box">
+        <div class="detail-row"><span>Receipt</span><strong>${data.receipt || 'Processing'}</strong></div>
+        <div class="detail-row"><span>Status</span><span class="badge badge-completed">Paid</span></div>
+        <div class="detail-row"><span>Delivery</span><strong>${data.shipping || 'Standard Courier'}</strong></div>
+      </div>
+      <a href="/" class="btn btn-gold">Return to Home</a>
+    `;
+  }
+
+  function renderPending() {
+    document.getElementById('card').innerHTML = `
+      <div class="icon">⏳</div>
+      <h1 class="title">Still Processing</h1>
+      <p class="subtitle">Safaricom is taking a moment. If you've entered your PIN, your order will update shortly.</p>
+      <button onclick="location.reload()" class="btn btn-gold">Refresh Status</button>
+    `;
+  }
+
+  function renderError(msg) {
+    document.getElementById('card').innerHTML = `<div class="icon">⚠️</div><p>${msg}</p><a href="/" class="btn btn-gold">Back</a>`;
+  }
+
+  pollStatus();
+</script>
+</body>
+</html>
