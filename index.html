@@ -236,6 +236,40 @@
         renderBooks();
         renderAudios();
     }
+    async function initiatePayment() {
+    const email = document.getElementById('logEmail').value;
+    const phone = document.getElementById('uPhone').value; // From join/profile
+    const address = document.getElementById('shipAddress').value;
+    const method = document.getElementById('shipMethod').value;
+
+    if (!address || address.length < 10) {
+        alert("Please provide a detailed delivery address (Estate/House No/Landmark).");
+        return;
+    }
+
+    // Calculate shipping cost
+    const shippingFees = { 'nairobi': 250, 'upcountry': 450, 'pickup': 0 };
+    const fee = shippingFees[method];
+
+    // Trigger the STK Push via your Netlify Function
+    const response = await fetch('/.netlify/functions/mpesa-payment', {
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            phone,
+            cart, // Your array of books
+            shippingType: method,
+            shippingFee: fee,
+            address: address
+        })
+    });
+    
+    const result = await response.json();
+    if (result.checkout_id) {
+        window.location.href = `/payment-success.html?checkout_id=${result.checkout_id}`;
+       }
+    }
+    
 </script>
 
 </body>
