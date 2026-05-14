@@ -65,12 +65,20 @@
         </div>
 
         <div class="lectures-preview">
-            <h3 style="font-family: 'Cinzel'; color: var(--deep-maroon);">Spiritual Insights for Seekers</h3>
-            <p>We invite you to read these foundational lectures from the Message:</p>
-            <a href="#" class="lecture-link">1. What seek ye?</a>
-            <a href="#" class="lecture-link">2. Silence</a>
-            <a href="#" class="lecture-link">3. The World</a>
-        </div>
+    <h3 style="font-family: 'Cinzel'; color: var(--deep-maroon);">Spiritual Insights</h3>
+    
+    <div id="lecture-content" style="background: white; padding: 15px; display: none; margin-bottom: 15px; border: 1px solid #ddd; font-size: 0.9rem;">
+        <h4 id="lecture-title"></h4>
+        <p id="lecture-body"></p>
+        <button class="btn" style="width: auto; padding: 5px 15px;" onclick="closeLecture()">Close Reader</button>
+    </div>
+
+    <div id="lecture-links">
+        <a href="javascript:void(0)" class="lecture-link" onclick="readLecture('What seek ye?')">1. What seek ye?</a>
+        <a href="javascript:void(0)" class="lecture-link" onclick="readLecture('Silence')">2. Silence</a>
+        <a href="javascript:void(0)" class="lecture-link" onclick="readLecture('The World')">3. The World</a>
+    </div>
+</div>
 
         <h2 style="font-family: 'Cinzel'; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Available Volumes</h2>
         <div class="grid" id="book-grid">
@@ -82,6 +90,24 @@
     </div>
 
 <script>
+    const lectureData = {
+    "What seek ye?": "What seek ye? Tell me, what is this urgent drive? Like a storm it rushes through the world... Seekers! If you would find the right path, you must first have clarity within yourselves as to what you actually seek!",
+    "Silence": "When a person finds himself in a state of inner silence, he is able to hear the inner voice. Not the voice of the intellect, but the voice of the Spirit, which connects directly to the Light...",
+    "The World": "The world is not merely what your physical eyes behold. It is a vast structure of many planes, all governed by the same immutable Laws of Reciprocal Action. What you sow here, you shall reap throughout the planes."
+};
+
+function readLecture(title) {
+    document.getElementById('lecture-title').innerText = title;
+    document.getElementById('lecture-body').innerText = lectureData[title];
+    document.getElementById('lecture-content').style.display = 'block';
+    document.getElementById('lecture-links').style.display = 'none';
+}
+
+function closeLecture() {
+    document.getElementById('lecture-content').style.display = 'none';
+    document.getElementById('lecture-links').style.display = 'block';
+}
+    
     const inventory = [
         { name: "In the Light of Truth", img: "in_light_of_truth_lage.jpg", price: 1500 },
         { name: "The Ten Commandments", img: "10_commandments_largei.jpg", price: 1200 },
@@ -109,6 +135,52 @@
             </div>
         `).join('');
     }
+    let cart = [];
+
+function addToCart(index) {
+    const item = inventory[index];
+    cart.push(item);
+    updateCartUI();
+    alert(`${item.name} has been added to your order.`);
+}
+
+function updateCartUI() {
+    // This logic can be expanded to show a cart icon/count on your mobile screen
+    console.log("Current Cart:", cart);
+}
+
+// THE MAIN CHECKOUT TRIGGER
+async function handleCheckout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty. Please select a volume first.");
+        return;
+    }
+
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const email = document.getElementById('user-email').value;
+
+    // This calls your Netlify Function we discussed earlier
+    try {
+        const response = await fetch('/.netlify/functions/mpesa-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: email,
+                items: cart,
+                total: total
+            })
+        });
+
+        const data = await response.json();
+        if (data.CheckoutRequestID) {
+            alert("Please check your phone for the M-Pesa STK Push.");
+        }
+    } catch (error) {
+        console.error("Payment Error:", error);
+        alert("Connection to payment gateway failed. Please check your network.");
+    }
+}
+
 </script>
 </body>
 </html>
