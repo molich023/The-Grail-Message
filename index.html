@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Portal - In the Light of Truth</title>
+    <style>
+        :root { --deep-maroon: #800000; --gold: #D4AF37; }
+        body { font-family: 'Georgia', serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f4f4; }
+        nav { background: var(--deep-maroon); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-links a { color: white; margin-left: 15px; text-decoration: none; font-size: 0.9rem; }
+        .container { max-width: 900px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; }
+        .author-section { border-left: 4px solid var(--gold); padding-left: 20px; margin-bottom: 30px; }
+        .lecture-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .reader-box { display: none; background: #fffdf5; padding: 20px; border: 1px solid var(--gold); margin-top: 20px; }
+        .btn { background: var(--deep-maroon); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo"><strong>In the Light of Truth</strong></div>
+    <div class="nav-links" id="auth-menu">
+        <span id="welcome-msg">Welcome, Seeker</span>
+        <a href="#author">Author</a>
+        <a href="#lectures">Free Lectures</a>
+        <a href="javascript:void(0)" onclick="handleLogout()">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <section id="author" class="author-section">
+        <h2 style="color: var(--deep-maroon);">About the Author: Abd-ru-shin</h2>
+        <p><strong>Abd-ru-shin</strong> (Oskar Ernst Bernhardt, 1875–1941) is the author of <em>In the Light of Truth – The Grail Message</em>. His name translates to "Servant of the Light," reflecting his mission to bring clarity to the great problems of human existence.</p>
+    </section>
+
+    <section id="lectures">
+        <h3>Selected Lectures for Registered Users</h3>
+        <div class="lecture-card">
+            <h4>1. What seek ye?</h4>
+            <button class="btn" onclick="openReader('What seek ye?')">Read Online</button>
+            <button class="btn" style="background:#555;" onclick="downloadLecture('What-seek-ye.txt')">Download PDF</button>
+        </div>
+        <div class="lecture-card">
+            <h4>2. Silence</h4>
+            <button class="btn" onclick="openReader('Silence')">Read Online</button>
+            <button class="btn" style="background:#555;" onclick="downloadLecture('Silence.txt')">Download PDF</button>
+        </div>
+        <div class="lecture-card">
+            <h4>3. Man and his free will</h4>
+            <button class="btn" onclick="openReader('Man and his free will')">Read Online</button>
+            <button class="btn" style="background:#555;" onclick="downloadLecture('Free-Will.txt')">Download PDF</button>
+        </div>
+    </section>
+
+    <div id="reader" class="reader-box">
+        <h3 id="reader-title"></h3>
+        <p id="reader-body"></p>
+        <button class="btn" onclick="closeReader()">Close Reader</button>
+    </div>
+</div>
+
+<script>
+    // Simple authentication check for the "Welcome" menu
+    window.onload = function() {
+        const userName = localStorage.getItem('loggedUser') || "Guest";
+        document.getElementById('welcome-msg').innerText = "Welcome, " + userName;
+    };
+
+    const lectures = {
+        "What seek ye?": "Seekers! If you would find the right path, you must first have clarity within yourselves as to what you actually seek! Like a storm it rushes through the world...",
+        "Silence": "In inner silence, one is able to hear the voice of the Spirit, which connects directly to the Light. It is not the voice of the intellect.",
+        "Man and his free will": "The world is governed by the Laws of Reciprocal Action. What you sow here, you shall reap throughout the planes of existence."
+    };
+
+    function openReader(title) {
+        document.getElementById('reader-title').innerText = title;
+        document.getElementById('reader-body').innerText = lectures[title];
+        document.getElementById('reader').style.display = 'block';
+        window.location.hash = 'reader';
+    }
+
+    function closeReader() {
+        document.getElementById('reader').style.display = 'none';
+    }
+
+    function downloadLecture(filename) {
+        alert("Preparing your free download: " + filename);
+        // This would trigger the actual file path on your server/Netlify
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('loggedUser');
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>
