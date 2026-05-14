@@ -132,6 +132,15 @@ async function loadOrders() {
                     <th>Date</th>
                     <th>Status</th>
                 </tr>
+                // Add this to your Admin Order Table rendering logic
+const deliveryStatus = order.shipping_address === 'Digital' 
+    ? 'N/A' 
+    : `<a href="https://www.google.com/maps/search/${encodeURIComponent(order.shipping_address)}" target="_blank">View Map</a>`;
+
+// Example row output:
+// <td>${order.shipping_address}</td>
+// <td>${deliveryStatus}</td>
+
             </thead>
             <tbody id="subList">
                 </tbody>
