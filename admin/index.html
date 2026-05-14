@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian Dashboard | Grail Message Kenya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --sky-blue: #87CEEB; --deep-ocean: #0d2a42; --gold: #D4AF37; }
+        body { 
+            font-family: 'Inter', sans-serif; background: #f4f9ff; margin: 0; 
+            color: var(--deep-ocean); padding-bottom: 60px;
+        }
+        header { 
+            background: var(--sky-blue); padding: 20px; color: white; 
+            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .container { max-width: 1000px; margin: auto; padding: 15px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-card h3 { margin: 0; font-size: 0.8rem; text-transform: uppercase; color: #666; }
+        .stat-card p { margin: 5px 0 0; font-size: 1.4rem; font-weight: bold; color: var(--sky-blue); }
+
+        .order-card { 
+            background: white; border-radius: 15px; padding: 20px; 
+            margin-bottom: 15px; border-left: 6px solid #ccc;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .order-card.completed { border-left-color: #2ecc71; }
+        .order-card.pending { border-left-color: #f1c40f; }
+
+        .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .badge-paid { background: #d4edda; color: #155724; }
+        .badge-wait { background: #fff3cd; color: #856404; }
+
+        .btn-action { 
+            background: var(--deep-ocean); color: white; border: none; 
+            padding: 10px 15px; border-radius: 8px; font-size: 0.8rem;
+            cursor: pointer; margin-top: 10px; width: 100%;
+        }
+        .ship-info { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem; border: 1px dashed #ddd; }
+        
+        .nav-tabs { display: flex; justify-content: space-around; background: white; padding: 10px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
+        .nav-tab { font-family: 'Cinzel'; font-size: 0.7rem; color: #999; cursor: pointer; }
+        .nav-tab.active { color: var(--sky-blue); border-bottom: 2px solid var(--sky-blue); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="font-family: 'Cinzel'; margin: 0; font-size: 1.2rem;">Guardian Sanctuary</h1>
+</header>
+
+<nav class="nav-tabs">
+    <div class="nav-tab active" onclick="loadOrders('all')">All Orders</div>
+    <div class="nav-tab" onclick="loadOrders('pending')">Pending</div>
+    <div class="nav-tab" onclick="loadOrders('completed')">Completed</div>
+</nav>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card"><h3>Total Sales</h3><p id="stat-sales">0</p></div>
+        <div class="stat-card"><h3>Active Seeker</h3><p id="stat-seekers">0</p></div>
+    </div>
+
+    <div id="order-list">
+        <p style="text-align:center; color: #999;">Communing with the database...</p>
+    </div>
+</div>
+
+<script>
+    // Initialize Supabase (Use your actual credentials)
+    const supabase = netlifyIdentity.currentUser() ? 
+        createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_KEY') : null;
+
+    async function loadOrders(filter = 'all') {
+        const list = document.getElementById('order-list');
+        let query = supabase.from('orders').select('*').order('created_at', { ascending: false });
+        
+        if (filter !== 'all') query = query.eq('status', filter);
+
+        const { data, error } = await query;
+
+        if (error) { list.innerHTML = `<p>Error: ${error.message}</p>`; return; }
+
+        // Update Stats
+        document.getElementById('stat-sales').innerText = data.filter(o => o.status === 'completed').length;
+        document.getElementById('stat-seekers').innerText = new Set(data.map(o => o.email)).size;
+
+        list.innerHTML = data.map(order => `
+            <div class="order-card ${order.status}">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <strong style="font-size: 0.9rem;">${order.email}</strong><br>
+                        <small style="color:#888;">${new Date(order.created_at).toLocaleString()}</small>
+                    </div>
+                    <span class="badge ${order.status === 'completed' ? 'badge-paid' : 'badge-wait'}">
+                        ${order.status}
+                    </span>
+                </div>
+                
+                <div style="margin-top:10px; font-size:0.9rem;">
+                    <strong>Items:</strong> ${order.items.map(i => i.name).join(', ')}<br>
+                    <strong>Total:</strong> KES ${order.total_amount}
+                </div>
+
+                ${order.shipping_address ? `
+                    <div class="ship-info">
+                        <strong>Shipping to:</strong><br>
+                        ${order.shipping_address}
+                    </div>
+                ` : ''}
+
+                ${order.status === 'pending' ? `
+                    <button class="btn-action" onclick="approveOrder('${order.id}')">Manual Approve (Paid Cash)</button>
+                ` : `
+                    <div style="font-size:0.7rem; color:green; margin-top:5px;">Receipt: ${order.mpesa_receipt || 'Manual'}</div>
+                `}
+            </div>
+        `).join('');
+    }
+
+    async function approveOrder(id) {
+        if (!confirm("Confirm manual payment for this seeker?")) return;
+        await supabase.from('orders').update({ status: 'completed', mpesa_receipt: 'MANUAL_OFFLINE' }).eq('id', id);
+        loadOrders();
+    }
+
+    // Initial Load
+    window.onload = () => loadOrders();
+</script>
+</body>
+</html>
