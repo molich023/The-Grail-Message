@@ -1,0 +1,4 @@
+Contact: mailto:contact@grailmessagekenya.eu.org
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en, sw
+Canonical: https://grailmessagekenya.eu.org/.well-known/security.txt
