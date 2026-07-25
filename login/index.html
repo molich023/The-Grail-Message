@@ -259,10 +259,9 @@ function doLogin() {
     showMsg('eL','Please enter your email and password.','err');
     return;
   }
-
-  const captchaToken = hcaptcha.getResponse();
+  const captchaToken = turnstile.getResponse();
   if (!captchaToken) {
-    showMsg('eL', 'Please complete the captcha challenge.', 'err');
+    showMsg('eS', 'Please complete the captcha challenge.', 'err');
     return;
   }
 
