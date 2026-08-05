@@ -4,11 +4,13 @@
   "description": "Luminous Portal for Grail Message Kenya",
   "main": "index.js",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.39.0",
     "node-fetch": "^2.7.0"
   },
   "devDependencies": {},
   "scripts": {
+    "build": "echo 'No build step required'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Grail Message Kenya",
